@@ -269,11 +269,20 @@ def checkfiles():
                 "|date=" + self.informatdate() +
                 "}}"
                 )
-            
-            
-            
-                
-                    
+
+            if re.search(r"Creative Commons", webpage) is not None or TrustedChannel == True:
+                new_text = re.sub(RegexOfLicenseReviewTemplate, TAGS, old_text)
+            else:
+                continue
+            if new_text == old_text:continue
+            else:pass
+            try:
+                self.commit(
+                    old_text, new_text, file_page, "{0}".format(EditSummary)
+                    )
+            except pywikibot.LockedPage as error:
+                print(colored("Page is locked '%s'." % error, 'red'))
+                continue
 
         else:continue
             
