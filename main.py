@@ -269,6 +269,10 @@ def checkfiles():
                 "|date=" + self.informatdate() +
                 "}}"
                 )
+            
+
+            TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
+            EditSummary = TrustTextAppend, "License review passed", " Title of video:", video_title, "Channel Name:", YouTubeChannelName , " Video ID:", video_id,  " Channel ID:", YouTubeChannelId, "Archived Video on WayBack Machine"
 
             if re.search(r"Creative Commons", webpage) is not None or TrustedChannel == True:
                 new_text = re.sub(RegexOfLicenseReviewTemplate, TAGS, old_text)
@@ -277,9 +281,7 @@ def checkfiles():
             if new_text == old_text:continue
             else:pass
             try:
-                self.commit(
-                    old_text, new_text, file_page, "{0}".format(EditSummary)
-                    )
+                commit(old_text, new_text, page, "{0}".format(EditSummary))
             except pywikibot.LockedPage as error:
                 print(colored("Page is locked '%s'." % error, 'red'))
                 continue
