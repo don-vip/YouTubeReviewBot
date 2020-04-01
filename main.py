@@ -123,7 +123,7 @@ def checkfiles():
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
             EditSummary = "@%s Removing licenseReview Template, not required for ownwork." % uploader(filename,link=True)
             try:
-                commit(old_text, new_text, page, "{0}".format(EditSummary))
+                commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
                 out("Page is locked '%s'." % error, 'red')
                 continue
@@ -132,7 +132,7 @@ def checkfiles():
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{FlickrReview}}" , old_text)
             EditSummary = "@%s Marking for flickr review, file added to [[Category:Flickr videos review needed]]." % uploader(filename,link=True)
             try:
-                commit(old_text, new_text, page, "{0}".format(EditSummary))
+                commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
                 out("Page is locked '%s'." % error, 'red')
                 continue
@@ -180,7 +180,7 @@ def checkfiles():
                 old_text)
             EditSummary = "License review passed ", " Channel Name/ID:", VimeoChannelId, " Video ID:", VimeoVideoId, " License :", licensesP1,"-",licensesP2, "Archived Video on WayBack Machine"
             try:
-                commit(old_text, new_text, page, "{0}".format(EditSummary))
+                commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
                 continue
 
@@ -213,9 +213,9 @@ def checkfiles():
                         continue
                     else:pass
                     not_available_new_text = re.sub("</gallery>", "%s|Uploader Name : %s <br> video url : %s <br> oldest archive : %s \n</gallery>" % ( filename, uploader(filename,link=True), OriginalURL , oldest_archive_url) , not_available_old_text)
-                    not_available_EditSummary = "Adding [[%s]] which is uploaded by %s" % (filename, uploader(filename,link=True))
+                    EditSummary = "Adding [[%s]] which is uploaded by %s" % (filename, uploader(filename,link=True))
                     try:
-                        commit(not_available_old_text, not_available_new_text, not_available_page, "{0}".format(not_available_EditSummary))
+                        commit(not_available_old_text, not_available_new_text, not_available_page, EditSummary)
                     except pywikibot.LockedPage as error:
                         print(colored("Page is locked '%s'." % error, 'red'))
                         continue
@@ -228,7 +228,7 @@ def checkfiles():
             YouTubeChannelNameRegex3 = r"Unsubscribe from ([^<{]*?)\?"
             YouTubeVideoTitleRegex1 = r"\"title\":\"(.{1,160})\",\"length"
             YouTubeVideoTitleRegex2 = r"<title>(?:\s*|)(.{1,250})(?:\s*|)- YouTube(?:\s*|)</title>"
-            
+
             # try to get channel Id
             try:
                 YouTubeChannelId = re.search(YouTubeChannelIdRegex1,webpage).group(1)
@@ -255,7 +255,7 @@ def checkfiles():
                     YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex2,webpage).group(1)
                 except AttributeError:
                     continue
-            
+
             # Clean shit, if present in Video title or Channel Name
             YouTubeChannelName = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeChannelName)
             YouTubeVideoTitle  = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeVideoTitle )
@@ -280,7 +280,7 @@ def checkfiles():
             if new_text == old_text:continue
             else:pass
             try:
-                commit(old_text, new_text, page, "{0}".format(EditSummary))
+                commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
                 print(colored("Page is locked '%s'." % error, 'red'))
                 continue
