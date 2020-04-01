@@ -212,10 +212,10 @@ def checkfiles():
                     if (not_available_old_text.find(filename) != -1):
                         continue
                     else:pass
-                    not_available_new_text = re.sub("</gallery>", "%s|Uploader Name : %s <br> video url : %s <br> oldest archive : %s \n</gallery>" % ( filename, self.uploader(filename,link=True), OriginalURL , oldest_archive_url) , not_available_old_text)
-                    not_available_EditSummary = "Adding [[%s]] which is uploaded by %s" % (filename, self.uploader(filename,link=True))
+                    not_available_new_text = re.sub("</gallery>", "%s|Uploader Name : %s <br> video url : %s <br> oldest archive : %s \n</gallery>" % ( filename, uploader(filename,link=True), OriginalURL , oldest_archive_url) , not_available_old_text)
+                    not_available_EditSummary = "Adding [[%s]] which is uploaded by %s" % (filename, uploader(filename,link=True))
                     try:
-                        self.commit(not_available_old_text, not_available_new_text, not_available_page, "{0}".format(not_available_EditSummary))
+                        commit(not_available_old_text, not_available_new_text, not_available_page, "{0}".format(not_available_EditSummary))
                     except pywikibot.LockedPage as error:
                         print(colored("Page is locked '%s'." % error, 'red'))
                         continue
@@ -266,10 +266,9 @@ def checkfiles():
                 "|ChannelID=" + YouTubeChannelId +
                 "|title=" + YouTubeVideoTitle + 
                 "|archive=" + archive_url +
-                "|date=" + self.informatdate() +
+                "|date=" + informatdate() +
                 "}}"
                 )
-            
 
             TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
             EditSummary = TrustTextAppend, "License review passed", " Title of video:", video_title, "Channel Name:", YouTubeChannelName , " Video ID:", video_id,  " Channel ID:", YouTubeChannelId, "Archived Video on WayBack Machine"
