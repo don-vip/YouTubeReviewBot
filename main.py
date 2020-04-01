@@ -106,7 +106,7 @@ def ChannelChk(ChannelId):
     
 
 def checkfiles():
-    category = pywikibot.Category(SITE,'Animated videos uploaded by Eatcha')
+    category = pywikibot.Category(SITE,'License_review_needed_(video)')
     gen = pagegenerators.CategorizedPageGenerator(category)
     for page in gen:
         filename = page.title()
