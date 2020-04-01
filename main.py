@@ -66,7 +66,7 @@ def DetectSite(pagetext):
     elif (LowerCasePageText.find('youtube.com') != -1):
         return "YouTube"
 
-def archived_url(url):
+def archived_url(SourceURL):
     archive_url = None
     status = "Wait"
     iters = 0
@@ -74,7 +74,7 @@ def archived_url(url):
         iters = iters + 1
         if iters > 5:
             status = "Stop"
-        archive_url = savepagenow.capture(url)
+        archive_url = savepagenow.capture(SourceURL)
         try:
             archive_url
             status = "Done"
@@ -171,7 +171,10 @@ def checkfiles():
                 except:
                     continue
             SourceURL = "https://vimeo.com/%s" % VimeoVideoId
-            archive_url = archived_url(SourceURL)
+            if archived_url(SourceURL) == None:
+                continue
+            else:
+                archive_url = archived_url(SourceURL)
             if archived_webpage(archive_url) == None:
                 continue
             else:
@@ -219,7 +222,10 @@ def checkfiles():
                 except:
                     continue
             SourceURL = "https://www.youtube.com/watch?v=%s" % YouTubeVideoId
-            archive_url = archived_url(SourceURL)
+            if archived_url(SourceURL) == None:
+                continue
+            else:
+                archive_url = archived_url(SourceURL)
             if archived_webpage(archive_url) == None:
                 continue
             else:
