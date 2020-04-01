@@ -32,6 +32,17 @@ def isOwnWork(pagetext):
     elif (LowerCasePageText.find('own work') != -1):
         return True
 
+def IsMarkedForDeletion(pagetext):
+    LowerCasePageText = pagetext.lower()
+    if (
+        (LowerCasePageText.find('{{No permission since') != -1) or
+        (LowerCasePageText.find('{{delete') != -1) or
+        (LowerCasePageText.find('{{copyvio') != -1) or
+        (LowerCasePageText.find('{{speedy') != -1)
+        ):
+            return True
+
+
 def uploader(filename, link=True):
     """user that uploaded the video"""
     page = pywikibot.Page(SITE, filename)
@@ -116,8 +127,9 @@ def checkfiles():
         old_text = pagetext
         global LowerCasePageText
         LowerCasePageText = pagetext.lower()
+        if IsMarkedForDeletion(pagetext) == True:continue
 
-        if OwnWork():
+        elif OwnWork():
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
             EditSummary = "@%s Removing licenseReview Template, not required for ownwork." % uploader(filename,link=True)
             try:
@@ -271,7 +283,7 @@ def checkfiles():
             TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
             EditSummary = TrustTextAppend, "License review passed", " Title of video:", YouTubeVideoTitle, "Channel Name:", YouTubeChannelName , " Video ID:", YouTubeVideoId,  " Channel ID:", YouTubeChannelId, "Archived Video on WayBack Machine"
 
-            if re.search(r"Creative Commons", webpage) is not None or TrustedChannel == True:
+            if re.search(r"Creative Commons", webpage) is not None or ChannelChk(ChannelId) == "Trusted":
                 new_text = re.sub(RegexOfLicenseReviewTemplate, TAGS, old_text)
             else:
                 continue
