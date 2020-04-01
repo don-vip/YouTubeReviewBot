@@ -105,11 +105,11 @@ def OwnWork():
         return False
 
 def ChannelChk(ChannelId):
-    PageOfTrustedChannelId = pywikibot.Page(G_Site, "User:YouTubeReviewBot/Trusted")
+    PageOfTrustedChannelId = pywikibot.Page(SITE, "User:YouTubeReviewBot/Trusted")
     TextOfPageOfTrustedChannelId = PageOfTrustedChannelId.get(get_redirect=True, force=True)
     if (TextOfPageOfTrustedChannelId.find(ChannelId) != -1):
         return "Trusted"
-    PageOfBadChannelId = pywikibot.Page(G_Site, "User:YouTubeReviewBot/bad-authors")
+    PageOfBadChannelId = pywikibot.Page(SITE, "User:YouTubeReviewBot/bad-authors")
     TextOfPageOfBadChannelId = PageOfBadChannelId.get(get_redirect=True, force=True)
     if (TextOfPageOfBadChannelId.find(ChannelId) != -1):
         return "Bad"
