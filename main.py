@@ -98,7 +98,7 @@ def ChannelChk(ChannelId):
     TextOfPageOfTrustedChannelId = PageOfTrustedChannelId.get(get_redirect=True, force=True)
     if (TextOfPageOfTrustedChannelId.find(ChannelId) != -1):
         return "Trusted"
-PageOfBadChannelId = pywikibot.Page(G_Site, "User:YouTubeReviewBot/bad-authors")
+    PageOfBadChannelId = pywikibot.Page(G_Site, "User:YouTubeReviewBot/bad-authors")
     TextOfPageOfBadChannelId = PageOfBadChannelId.get(get_redirect=True, force=True)
     if (TextOfPageOfBadChannelId.find(ChannelId) != -1):
         return "Bad"
@@ -193,7 +193,7 @@ def checkfiles():
             SourceURL = "https://www.youtube.com/watch?v=%s" % YouTubeVideoId
             archive_url = archived_url(SourceURL)
             webpage = archived_webpage(archive_url)
-            if (
+            if ((
                 webpage.find('YouTube account associated with this video has been terminated') or
                 webpage.find('playerErrorMessageRenderer') or
                 webpage.find('Video unavailable') or
