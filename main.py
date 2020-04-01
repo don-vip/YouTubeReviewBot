@@ -172,7 +172,10 @@ def checkfiles():
                     continue
             SourceURL = "https://vimeo.com/%s" % VimeoVideoId
             archive_url = archived_url(SourceURL)
-            webpage = archived_webpage(archive_url)
+            if archived_webpage(archive_url) == None:
+                continue
+            else:
+                webpage = archived_webpage(archive_url)
             matches = re.finditer(r"http(?:s|)\:\/\/vimeo\.com\/(.{0,30})\/video", webpage, re.MULTILINE)
             for m in matches:
                 VimeoChannelId = m.group(1)
@@ -217,7 +220,10 @@ def checkfiles():
                     continue
             SourceURL = "https://www.youtube.com/watch?v=%s" % YouTubeVideoId
             archive_url = archived_url(SourceURL)
-            webpage = archived_webpage(archive_url)
+            if archived_webpage(archive_url) == None:
+                continue
+            else:
+                webpage = archived_webpage(archive_url)
             if ((
                 webpage.find('YouTube account associated with this video has been terminated') or
                 webpage.find('playerErrorMessageRenderer') or
