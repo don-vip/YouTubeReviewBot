@@ -68,7 +68,11 @@ def DetectSite(pagetext):
 
 def archived_url(url):
     status = "Wait"
+    iters = 0
     while status == "Wait":
+        iters = iters + 1
+        if iters > 5:
+            status = "Stop"
         archive_url = savepagenow.capture(url)
         try:
             archive_url
