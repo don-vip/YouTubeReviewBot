@@ -94,6 +94,18 @@ def OwnWork():
     else:
         return False
 
+def ChannelChk(ChannelId):
+    PageOfTrustedChannelId = pywikibot.Page(G_Site, "User:YouTubeReviewBot/Trusted")
+    TextOfPageOfTrustedChannelId = PageOfTrustedChannelId.get(get_redirect=True, force=True)
+    if (TextOfPageOfTrustedChannelId.find(ChannelId) != -1):
+        return "Trusted"
+PageOfBadChannelId = pywikibot.Page(G_Site, "User:YouTubeReviewBot/bad-authors")
+    TextOfPageOfBadChannelId = PageOfBadChannelId.get(get_redirect=True, force=True)
+    if (TextOfPageOfBadChannelId.find(ChannelId) != -1):
+        return "Bad"
+    return "Unknown"
+    
+
 def checkfiles():
     category = pywikibot.Category(SITE,'Animated videos uploaded by Eatcha')
     gen = pagegenerators.CategorizedPageGenerator(category)
@@ -247,6 +259,16 @@ def checkfiles():
             # Clean shit, if present in Video title or Channel Name
             YouTubeChannelName = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeChannelName)
             YouTubeVideoTitle  = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeVideoTitle )
+            TAGS = str(
+                "{{YouTubeReview"
+                "|id=" + video_id + 
+                "|ChannelName=" + YouTubeChannelName + 
+                "|ChannelID=" + YouTubeChannelId +
+                "|title=" + YouTubeVideoTitle + 
+                "|archive=" + archive_url +
+                "|date=" + self.informatdate() +
+                "}}"
+                )
             
             
             
