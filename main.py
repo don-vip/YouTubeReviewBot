@@ -259,7 +259,7 @@ def checkfiles():
             YouTubeVideoTitle  = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeVideoTitle )
             TAGS = str(
                 "{{YouTubeReview"
-                "|id=" + video_id + 
+                "|id=" + YouTubeVideoId + 
                 "|ChannelName=" + YouTubeChannelName + 
                 "|ChannelID=" + YouTubeChannelId +
                 "|title=" + YouTubeVideoTitle + 
@@ -269,7 +269,7 @@ def checkfiles():
                 )
 
             TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
-            EditSummary = TrustTextAppend, "License review passed", " Title of video:", video_title, "Channel Name:", YouTubeChannelName , " Video ID:", video_id,  " Channel ID:", YouTubeChannelId, "Archived Video on WayBack Machine"
+            EditSummary = TrustTextAppend, "License review passed", " Title of video:", YouTubeVideoTitle, "Channel Name:", YouTubeChannelName , " Video ID:", YouTubeVideoId,  " Channel ID:", YouTubeChannelId, "Archived Video on WayBack Machine"
 
             if re.search(r"Creative Commons", webpage) is not None or TrustedChannel == True:
                 new_text = re.sub(RegexOfLicenseReviewTemplate, TAGS, old_text)
