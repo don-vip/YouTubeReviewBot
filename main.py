@@ -212,8 +212,7 @@ def checkfiles():
                 webpage.find('If the owner of this video has granted you access') or
                 (webpage.find('player-unavailable') and webpage.find('Sorry about that'))
                 ) != -1):
-                    today = datetime.date.today()
-                    not_available_page_name = "User:YouTubeReviewBot/Video not available on YouTube and marked for license review/%s %s" % (Month[today.month], today.year,)
+                    not_available_page_name = "User:YouTubeReviewBot/Video not available on YouTube and marked for license review/%s" % (datetime.utcnow()).strftime('%B %Y')
                     not_available_page = pywikibot.Page(SITE, not_available_page_name)
                     try:
                         not_available_old_text = not_available_page.get(get_redirect=True, force=True)
