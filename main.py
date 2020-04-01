@@ -74,9 +74,8 @@ def archived_url(SourceURL):
         iters = iters + 1
         if iters > 5:
             status = "Stop"
-        archive_url = savepagenow.capture(SourceURL)
         try:
-            archive_url
+            archive_url = savepagenow.capture(SourceURL)
             status = "Done"
         except:
             pass
