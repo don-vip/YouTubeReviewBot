@@ -5,7 +5,7 @@ from datetime import datetime
 import savepagenow
 import re
 from urllib.request import Request, urlopen
-RegexOfLicenseReviewTemplate = r"{{(?:|\s*)[LlYy][IiOo][CcUu][EeTt][NnUu][SsBb][Ee](?:|\s*)[Rr][Ee][Vv][Ii][Ee][Ww](?:|\s*)(?:\|.*|)}}"
+
 def informatdate():
     return (datetime.utcnow()).strftime('%Y-%m-%d')
 
@@ -118,6 +118,7 @@ def ChannelChk(ChannelId):
 
 def checkfiles():
     category = pywikibot.Category(SITE,'License_review_needed_(video)')
+    RegexOfLicenseReviewTemplate = r"{{(?:|\s*)[LlYy][IiOo][CcUu][EeTt][NnUu][SsBb][Ee](?:|\s*)[Rr][Ee][Vv][Ii][Ee][Ww](?:|\s*)(?:\|.*|)}}"
     gen = pagegenerators.CategorizedPageGenerator(category)
     for page in gen:
         filename = page.title()
