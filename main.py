@@ -67,6 +67,7 @@ def DetectSite(pagetext):
         return "YouTube"
 
 def archived_url(url):
+    archive_url = None
     status = "Wait"
     iters = 0
     while status == "Wait":
@@ -82,6 +83,7 @@ def archived_url(url):
     return archive_url
 
 def archived_webpage(archive_url):
+    webpage = None
     status = "Wait"
     iters = 0
     while status == "Wait":
