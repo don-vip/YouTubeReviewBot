@@ -278,6 +278,7 @@ def checkfiles():
                 "|date=" + informatdate() +
                 "}}"
                 )
+            print(TAGS)
 
             TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
             EditSummary = TrustTextAppend, "License review passed", " Title of video:", YouTubeVideoTitle, "Channel Name:", YouTubeChannelName , " Video ID:", YouTubeVideoId,  " Channel ID:", YouTubeChannelId, "Archived Video on WayBack Machine"
