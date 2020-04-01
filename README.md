@@ -23,3 +23,5 @@ Traceback (most recent call last):
     raise ValueError("unknown url type: %r" % self.full_url)
 ValueError: unknown url type: 'None'
 ```
+
+https://repl.it/repls/BustlingWoozyDeprecatedsoftware
