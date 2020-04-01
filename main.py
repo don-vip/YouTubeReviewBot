@@ -128,7 +128,9 @@ def checkfiles():
         old_text = pagetext
         global LowerCasePageText
         LowerCasePageText = pagetext.lower()
-        if IsMarkedForDeletion(pagetext) == True:continue
+        if IsMarkedForDeletion(pagetext) == True:
+            out("IGNORE - File is marked for deletion", color='red')
+            continue
 
         elif OwnWork():
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
