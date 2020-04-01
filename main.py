@@ -183,8 +183,77 @@ def checkfiles():
             SourceURL = "https://www.youtube.com/watch?v=%s" % YouTubeVideoId
             archive_url = archived_url(SourceURL)
             webpage = archived_webpage(archive_url)
+            if (
+                webpage.find('YouTube account associated with this video has been terminated') or
+                webpage.find('playerErrorMessageRenderer') or
+                webpage.find('Video unavailable') or
+                webpage.find('If the owner of this video has granted you access') or
+                (webpage.find('player-unavailable') and webpage.find('Sorry about that'))
+                ) != -1):
+                    today = datetime.date.today()
+                    not_available_page_name = "User:YouTubeReviewBot/Video not available on YouTube and marked for license review/%s %s" % (Month[today.month], today.year,)
+                    not_available_page = pywikibot.Page(SITE, not_available_page_name)
+                    try:
+                        not_available_old_text = not_available_page.get(get_redirect=True, force=True)
+                    except pywikibot.NoPage:
+                        not_available_old_text = "<gallery>\n</gallery>"
+                    if (not_available_old_text.find(filename) != -1):
+                        continue
+                    else:pass
+                    not_available_new_text = re.sub("</gallery>", "%s|Uploader Name : %s <br> video url : %s <br> oldest archive : %s \n</gallery>" % ( filename, self.uploader(filename,link=True), OriginalURL , oldest_archive_url) , not_available_old_text)
+                    not_available_EditSummary = "Adding [[%s]] which is uploaded by %s" % (filename, self.uploader(filename,link=True))
+                    try:
+                        self.commit(not_available_old_text, not_available_new_text, not_available_page, "{0}".format(not_available_EditSummary))
+                    except pywikibot.LockedPage as error:
+                        print(colored("Page is locked '%s'." % error, 'red'))
+                        continue
+            else:
+                pass
+            YouTubeChannelIdRegex1 = r"data-channel-external-id=\"(.{0,30})\""
+            YouTubeChannelIdRegex2 = r"[\"']externalChannelId[\"']:[\"']([a-zA-Z0-9_-]{0,25})[\"']"
+            YouTubeChannelNameRegex1 = r"\\\",\\\"author\\\":\\\"(.{1,50})\\\",\\\""
+            YouTubeChannelNameRegex2 = r"\"ownerChannelName\\\":\\\"(.{1,50})\\\","
+            YouTubeChannelNameRegex3 = r"Unsubscribe from ([^<{]*?)\?"
+            YouTubeVideoTitleRegex1 = r"\"title\":\"(.{1,160})\",\"length"
+            YouTubeVideoTitleRegex2 = r"<title>(?:\s*|)(.{1,250})(?:\s*|)- YouTube(?:\s*|)</title>"
+            
+            # try to get channel Id
+            try:
+                YouTubeChannelId = re.search(YouTubeChannelIdRegex1,webpage).group(1)
+            except AttributeError:
+                try:
+                    YouTubeChannelId = re.search(YouTubeChannelIdRegex2,webpage).group(1)
+                except AttributeError:
+                    continue
 
-        else:return
+            # try to get Channel name
+            try:
+                YouTubeChannelName  = re.search(YouTubeChannelNameRegex1,webpage).group(1)
+            except AttributeError:
+                try:
+                    YouTubeChannelName  = re.search(YouTubeChannelNameRegex2,webpage).group(1)
+                except AttributeError:
+                    continue
+
+            # try to get YouTube Video's Title
+            try:
+                YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex1,webpage).group(1)
+            except AttributeError:
+                try:
+                    YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex2,webpage).group(1)
+                except AttributeError:
+                    continue
+            
+            # Clean shit, if present in Video title or Channel Name
+            YouTubeChannelName = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeChannelName)
+            YouTubeVideoTitle  = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeVideoTitle )
+            
+            
+            
+                
+                    
+
+        else:continue
             
 
 def main():
