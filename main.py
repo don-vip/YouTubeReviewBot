@@ -2,7 +2,6 @@
 import pywikibot
 from pywikibot import pagegenerators
 from datetime import datetime
-import chkdel
 import savepagenow
 import re
 from urllib.request import Request, urlopen
@@ -117,9 +116,8 @@ def checkfiles():
         old_text = pagetext
         global LowerCasePageText
         LowerCasePageText = pagetext.lower()
-        if chkdel.check(pagetext) == True:continue # Do not review files marked for deletion
 
-        elif OwnWork():
+        if OwnWork():
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
             EditSummary = "@%s Removing licenseReview Template, not required for ownwork." % uploader(filename,link=True)
             try:
