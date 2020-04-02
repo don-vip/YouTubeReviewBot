@@ -131,7 +131,7 @@ def checkfiles():
     gen = pagegenerators.CategorizedPageGenerator(category)
     for page in gen:
         filename = page.title()
-        print(filename)
+        print("\n"+filename)
         page = pywikibot.Page(SITE, filename)
         pagetext = page.get(get_redirect=True)
         old_text = pagetext
@@ -142,6 +142,7 @@ def checkfiles():
             continue
 
         elif OwnWork():
+            out("Identified as %s" % DetectSite(), color="yellow")
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
             EditSummary = "@%s Removing licenseReview Template, not required for ownwork." % uploader(filename,link=True)
             try:
@@ -151,6 +152,7 @@ def checkfiles():
                 continue
 
         elif DetectSite() == "Flickr":
+            out("Identified as %s" % DetectSite(), color="yellow")
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{FlickrReview}}" , old_text)
             EditSummary = "@%s Marking for flickr review, file added to [[Category:Flickr videos review needed]]." % uploader(filename,link=True)
             try:
@@ -160,6 +162,7 @@ def checkfiles():
                 continue
 
         elif DetectSite() == "Vimeo":
+            out("Identified as %s" % DetectSite(), color="yellow")
             VimeoUrlPattern = re.compile(r'vimeo\.com\/((?:[0-9_]+))')
             FromVimeoRegex = re.compile(r'{{\s*?[Ff]rom\s[Vv]imeo\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1\=|)(?:\s*?|)([0-9_]+)')
             try:
@@ -189,8 +192,10 @@ def checkfiles():
                 continue
             if check_channel(VimeoChannelId) == "Trusted":pass
             if check_channel(VimeoChannelId) == "Bad":continue
+
             StandardCreativeCommonsUrlRegex = re.compile('https\:\/\/creativecommons\.org\/licenses\/(.*?)\/(.*?)\/')
             Allowedlicenses = ['by-sa', 'by', 'publicdomain', 'cc0']
+
             if re.search(r"creativecommons.org", webpage):
                 matches = StandardCreativeCommonsUrlRegex.finditer(webpage)
                 for m in matches:
@@ -216,6 +221,7 @@ def checkfiles():
                 continue
 
         elif DetectSite() == "YouTube":
+            out("Identified as %s" % DetectSite(), color="yellow")
             try:
                 YouTubeVideoId = re.search(r"{{\s*?[Ff]rom\s[Yy]ou[Tt]ube\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1|=\||)(?:=|)([^\"&?\/ ]{11})",pagetext).group(1)
             except AttributeError:
@@ -328,7 +334,9 @@ def checkfiles():
                 print(colored("Page is locked '%s'." % error, 'red'))
                 continue
 
-        else:continue
+        else:
+            out("Identified as %s" % DetectSite(), color="yellow")
+            continue
             
 
 def main():
