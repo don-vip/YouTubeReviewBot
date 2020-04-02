@@ -333,10 +333,8 @@ def checkfiles():
             except pywikibot.LockedPage as error:
                 print(colored("Page is locked '%s'." % error, 'red'))
                 continue
-
         else:
             continue
-            
 
 def main():
     global SITE
