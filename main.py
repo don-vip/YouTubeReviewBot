@@ -55,14 +55,13 @@ def archived_url(SourceURL):
     iters = 0
     while status == "Wait":
         iters = iters + 1
-        if iters > 5:
-            return None
-            status = "Stop"
         try:
             archive_url = savepagenow.capture(SourceURL)
             status = "Done"
         except:
             pass
+        if iters > 5:
+            status = "Stop"
     return archive_url
 
 def archived_webpage(archive_url):
@@ -71,7 +70,7 @@ def archived_webpage(archive_url):
     iters = 0
     while status == "Wait":
         iters = iters + 1
-        if iters > 5:
+        if not archive_url:
             status = "Stop"
         req = Request(archive_url,headers={'User-Agent': 'User:YouTubeReviewBot on wikimedia commons'})
         try:
@@ -79,6 +78,8 @@ def archived_webpage(archive_url):
             status = "Done"
         except:
             pass
+        if iters > 5:
+            status = "Stop"
     return webpage
 
 def check_channel(ChannelId):
