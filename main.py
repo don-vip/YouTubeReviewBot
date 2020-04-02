@@ -72,8 +72,7 @@ def archived_webpage(archive_url):
         iters = iters + 1
         try:
             req = Request(archive_url,headers={'User-Agent': 'User:YouTubeReviewBot on wikimedia commons'})
-            with urlopen(req).read().decode('utf-8') as response:
-                webpage = response.read()
+            webpage = urlopen(req).read().decode('utf-8')
             status = "Done"
         except:
             pass
@@ -426,6 +425,7 @@ def main(*args):
     global SITE
     global DRY
     global AUTO
+
     DRY = None
     AUTO = None
     for arg in sys.argv[1:]:
