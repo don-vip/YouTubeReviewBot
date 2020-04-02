@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pywikibot
-import savepagenow, re
+import savepagenow, re, sys
 from datetime import datetime
 from pywikibot import pagegenerators
 from urllib.request import Request, urlopen
@@ -11,9 +11,22 @@ def informatdate():
 
 def commit(old_text, new_text, page, summary):
     """Show diff and submit text to page."""
-    out("\nAbout to make changes at : '%s'" % page.title())
-    pywikibot.showDiff(old_text, new_text)
-    #page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
+    choice = pywikibot.inputChoice(
+        "Do you want to accept these changes to '%s' with summary '%s' ?"
+        % (page.title(), summary),
+        ["Yes", "No", "Quit"],
+        ["y", "N", "q"],
+        "N",
+        )
+        if choice == "y":
+            out("\nAbout to make changes at : '%s'" % page.title())
+            pywikibot.showDiff(old_text, new_text)
+            #page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
+            
+        elif choice == "q":
+            sys.exit(0)
+        else:
+            pass
 
 def out(text, newline=True, date=False, color=None):
     """Just output some text to the consoloe or log."""
