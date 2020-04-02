@@ -318,9 +318,10 @@ def checkfiles():
                 try:
                     YouTubeChannelId = re.search(YouTubeChannelIdRegex2,webpage).group(1)
                 except AttributeError:
+                    out("PARSING FAILED - Can't get YouTubeChannelId", color='red')
                     continue
 
-            if ChannelChk(YouTubeChannelId) == "Trusted":
+            if ChannelChk(YouTubeChannelId) == "Bad":
                 out("IGONRE - Bad Channel %s" % YouTubeChannelId , color="red")
                 continue
 
@@ -331,6 +332,7 @@ def checkfiles():
                 try:
                     YouTubeChannelName  = re.search(YouTubeChannelNameRegex2,webpage).group(1)
                 except AttributeError:
+                    out("PARSING FAILED - Can't get YouTubeChannelName", color='red')
                     continue
 
             # try to get YouTube Video's Title
@@ -340,6 +342,7 @@ def checkfiles():
                 try:
                     YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex2,webpage).group(1)
                 except AttributeError:
+                    out("PARSING FAILED - Can't get YouTubeVideoTitle", color='red')
                     continue
 
             # Remove unwanted sysmbols that may fuck-up the wiki-text, if present in Video title or Channel Name
