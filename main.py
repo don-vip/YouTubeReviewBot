@@ -263,7 +263,7 @@ def checkfiles():
             YouTubeChannelIdRegex2 = r"[\"']externalChannelId[\"']:[\"']([a-zA-Z0-9_-]{0,25})[\"']"
             YouTubeChannelNameRegex1 = r"\\\",\\\"author\\\":\\\"(.{1,50})\\\",\\\""
             YouTubeChannelNameRegex2 = r"\"ownerChannelName\\\":\\\"(.{1,50})\\\","
-            YouTubeChannelNameRegex3 = r"Unsubscribe from ([^<{]*?)\?"
+            #YouTubeChannelNameRegex3 = r"Unsubscribe from ([^<{]*?)\?"
             YouTubeVideoTitleRegex1 = r"\"title\":\"(.{1,160})\",\"length"
             YouTubeVideoTitleRegex2 = r"<title>(?:\s*|)(.{1,250})(?:\s*|)- YouTube(?:\s*|)</title>"
 
@@ -275,6 +275,10 @@ def checkfiles():
                     YouTubeChannelId = re.search(YouTubeChannelIdRegex2,webpage).group(1)
                 except AttributeError:
                     continue
+
+            if ChannelChk(YouTubeChannelId) == "Trusted":
+                out("IGONRE - Bad Channel %s" % YouTubeChannelId , color="red")
+                continue
 
             # try to get Channel name
             try:
