@@ -11,22 +11,19 @@ def informatdate():
 
 def commit(old_text, new_text, page, summary):
     """Show diff and submit text to page."""
-    choice = pywikibot.inputChoice(
-        "Do you want to accept these changes to '%s' with summary '%s' ?"
-        % (page.title(), summary),
-        ["Yes", "No", "Quit"],
-        ["y", "N", "q"],
-        "N",
-        )
-        if choice == "y":
-            out("\nAbout to make changes at : '%s'" % page.title())
-            pywikibot.showDiff(old_text, new_text)
-            #page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
-            
-        elif choice == "q":
-            sys.exit(0)
-        else:
-            pass
+    yes = {'yes','y', 'ye', ''}
+    no = {'no','n'}
+    quit = {'q','quit','exit'}
+    choice = raw_input().lower()
+    if choice in yes:
+        out("\nAbout to make changes at : '%s'" % page.title())
+        pywikibot.showDiff(old_text, new_text)
+        #page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
+    elif choice in no:
+        pass
+    else:
+        sys.stdout.write("Please respond with 'yes' , 'no' or 'quit")
+        
 
 def out(text, newline=True, date=False, color=None):
     """Just output some text to the consoloe or log."""
