@@ -305,8 +305,8 @@ def checkfiles():
             print(TAGS)
             YouTubeLicense = "CC BY 3.0"
             TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
-            EditSummary = TrustTextAppend, "License review passed", " Title of video:", YouTubeVideoTitle, "Channel Name:", YouTubeChannelName , " Video ID:", YouTubeVideoId,  " Channel ID:", YouTubeChannelId, "Archived Video on WayBack Machine"
-            EditSummary = "LR Passed, %s, by %s (%s) under terms of %s at www.youtube.com/watch?v=%s (Archived - WayBack Machine)" % (
+            EditSummary = "%s LR Passed, %s, by %s (%s) under terms of %s at www.youtube.com/watch?v=%s (Archived - WayBack Machine)" % (
+                TrustTextAppend,
                 YouTubeVideoTitle,
                 YouTubeChannelName,
                 YouTubeChannelId,
