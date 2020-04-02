@@ -372,6 +372,8 @@ def main():
     global DRY
     global AUTO
     SITE = pywikibot.Site()
+    DRY = None
+    AUTO = None
     checkfiles()
 
 if __name__ == "__main__":
