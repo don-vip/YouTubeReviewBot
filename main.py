@@ -137,12 +137,12 @@ def checkfiles():
         old_text = pagetext
         global LowerCasePageText
         LowerCasePageText = pagetext.lower()
+        out("Identified as %s" % DetectSite(), color="yellow")
         if IsMarkedForDeletion(pagetext) == True:
             out("IGNORE - File is marked for deletion", color='red')
             continue
 
         elif OwnWork():
-            out("Identified as %s" % DetectSite(), color="yellow")
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
             EditSummary = "@%s Removing licenseReview Template, not required for ownwork." % uploader(filename,link=True)
             try:
@@ -152,7 +152,6 @@ def checkfiles():
                 continue
 
         elif DetectSite() == "Flickr":
-            out("Identified as %s" % DetectSite(), color="yellow")
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{FlickrReview}}" , old_text)
             EditSummary = "@%s Marking for flickr review, file added to [[Category:Flickr videos review needed]]." % uploader(filename,link=True)
             try:
@@ -162,7 +161,6 @@ def checkfiles():
                 continue
 
         elif DetectSite() == "Vimeo":
-            out("Identified as %s" % DetectSite(), color="yellow")
             VimeoUrlPattern = re.compile(r'vimeo\.com\/((?:[0-9_]+))')
             FromVimeoRegex = re.compile(r'{{\s*?[Ff]rom\s[Vv]imeo\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1\=|)(?:\s*?|)([0-9_]+)')
             try:
@@ -221,7 +219,6 @@ def checkfiles():
                 continue
 
         elif DetectSite() == "YouTube":
-            out("Identified as %s" % DetectSite(), color="yellow")
             try:
                 YouTubeVideoId = re.search(r"{{\s*?[Ff]rom\s[Yy]ou[Tt]ube\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1|=\||)(?:=|)([^\"&?\/ ]{11})",pagetext).group(1)
             except AttributeError:
@@ -335,7 +332,6 @@ def checkfiles():
                 continue
 
         else:
-            out("Identified as %s" % DetectSite(), color="yellow")
             continue
             
 
