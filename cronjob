@@ -1,2 +1,2 @@
-0 7,15, * * * jsub -once -quiet bash /data/project/ytrb/update-repo
+0 7,15,23 * * * jsub -once -quiet bash /data/project/ytrb/update-repo
 13 * * * * jsub -once -quiet /data/project/ytrb/ytr-venv/bin/youtubereviewbotcommonswiki /data/project/ytrb/YouTubeReviewBot/main.py -pt:0 -auto
