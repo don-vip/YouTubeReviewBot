@@ -358,8 +358,12 @@ def checkfiles():
                 )
 
             print(TAGS)
+
+            if ChannelChk(YouTubeChannelId) == "Trusted":
+                TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
+            else:
+                TrustTextAppend = ""
             YouTubeLicense = "CC BY 3.0"
-            TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
             EditSummary = "%s LR Passed, %s, by %s (%s) under terms of %s at www.youtube.com/watch?v=%s (Archived - WayBack Machine)" % (
                 TrustTextAppend,
                 YouTubeVideoTitle,
