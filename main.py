@@ -271,15 +271,20 @@ def checkfiles():
                 webpage.find('If the owner of this video has granted you access') or
                 (webpage.find('player-unavailable') and webpage.find('Sorry about that'))
                 ) != -1):
-                    not_available_page_name = "User:YouTubeReviewBot/Video not available on YouTube and marked for license review/%s" % (datetime.utcnow()).strftime('%B %Y')
-                    not_available_page = pywikibot.Page(SITE, not_available_page_name)
+                    not_available_page = pywikibot.Page(
+                        SITE,
+                        ("User:YouTubeReviewBot/Video not available on YouTube and marked for license review/%s" % (datetime.utcnow()).strftime('%B %Y')),
+                        )
+
                     try:
                         not_available_old_text = not_available_page.get(get_redirect=True, force=True)
                     except pywikibot.NoPage:
                         not_available_old_text = "<gallery>\n</gallery>"
+
                     if (not_available_old_text.find(filename) != -1):
                         continue
                     else:pass
+
                     not_available_new_text = re.sub("</gallery>", "%s|Uploader Name : %s <br> video url : %s <br> oldest archive : %s \n</gallery>" % ( filename, uploader(filename,link=True), OriginalURL , oldest_archive_url) , not_available_old_text)
                     EditSummary = "Adding [[%s]], was uploaded by %s" % (filename, uploader(filename,link=True))
                     try:
