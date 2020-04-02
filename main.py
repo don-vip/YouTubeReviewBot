@@ -310,7 +310,7 @@ def checkfiles():
                         continue
                     else:pass
 
-                    not_available_new_text = re.sub("</gallery>", "%s|Uploader Name : %s <br> video url : %s <br> oldest archive : %s \n</gallery>" % ( filename, uploader(filename,link=True), OriginalURL , oldest_archive_url) , not_available_old_text)
+                    not_available_new_text = re.sub("</gallery>", "%s|Uploader Name : %s <br> video url : %s <br> oldest archive : %s \n</gallery>" % (filename, uploader(filename,link=True), OriginalURL , oldest_archive_url) , not_available_old_text)
                     EditSummary = "Adding [[%s]], was uploaded by %s" % (filename, uploader(filename,link=True))
                     try:
                         commit(not_available_old_text, not_available_new_text, not_available_page, EditSummary)
@@ -367,10 +367,10 @@ def checkfiles():
 
             TAGS = str(
                 "{{YouTubeReview"
-                "|id=" + YouTubeVideoId + 
-                "|ChannelName=" + YouTubeChannelName + 
+                "|id=" + YouTubeVideoId +
+                "|ChannelName=" + YouTubeChannelName +
                 "|ChannelID=" + YouTubeChannelId +
-                "|title=" + YouTubeVideoTitle + 
+                "|title=" + YouTubeVideoTitle +
                 "|archive=" + archive_url +
                 "|date=" + informatdate() +
                 "}}"
