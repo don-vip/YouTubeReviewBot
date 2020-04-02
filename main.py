@@ -6,6 +6,7 @@ import savepagenow
 import re
 from urllib.request import Request, urlopen
 
+
 def informatdate():
     return (datetime.utcnow()).strftime('%Y-%m-%d')
 
@@ -42,11 +43,9 @@ def IsMarkedForDeletion(pagetext):
         ):
             return True
 
-
 def uploader(filename, link=True):
     """user that uploaded the video"""
-    page = pywikibot.Page(SITE, filename)
-    history = page.getVersionHistory(reverse=True, total=1)
+    history = (pywikibot.Page(SITE, filename)).getVersionHistory(reverse=True, total=1)
     if not history:
         return "Unknown"
     if link:
@@ -54,7 +53,7 @@ def uploader(filename, link=True):
     else:
         return history[0][2]
 
-def DetectSite(pagetext):
+def DetectSite():
     if (LowerCasePageText.find('{{from vimeo') != -1):
         return "Vimeo"
     if (LowerCasePageText.find('{{from youtube') != -1):
@@ -150,7 +149,7 @@ def checkfiles():
                 out("Page is locked '%s'." % error, 'red')
                 continue
 
-        elif DetectSite(pagetext) == "Flickr":
+        elif DetectSite() == "Flickr":
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{FlickrReview}}" , old_text)
             EditSummary = "@%s Marking for flickr review, file added to [[Category:Flickr videos review needed]]." % uploader(filename,link=True)
             try:
@@ -159,7 +158,7 @@ def checkfiles():
                 out("Page is locked '%s'." % error, 'red')
                 continue
 
-        elif DetectSite(pagetext) == "Vimeo":
+        elif DetectSite() == "Vimeo":
             VimeoUrlPattern = re.compile(r'vimeo\.com\/((?:[0-9_]+))')
             FromVimeoRegex = re.compile(r'{{\s*?[Ff]rom\s[Vv]imeo\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1\=|)(?:\s*?|)([0-9_]+)')
             try:
@@ -212,7 +211,7 @@ def checkfiles():
             except pywikibot.LockedPage as error:
                 continue
 
-        elif DetectSite(pagetext) == "YouTube":
+        elif DetectSite() == "YouTube":
             try:
                 YouTubeVideoId = re.search(r"{{\s*?[Ff]rom\s[Yy]ou[Tt]ube\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1|=\||)(?:=|)([^\"&?\/ ]{11})",pagetext).group(1)
             except AttributeError:
