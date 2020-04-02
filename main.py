@@ -6,52 +6,24 @@ from datetime import datetime
 from pywikibot import pagegenerators
 from urllib.request import Request, urlopen
 
-def informatdate():
-    return (datetime.utcnow()).strftime('%Y-%m-%d')
-
-def commit(old_text, new_text, page, summary):
-    """Show diff and submit text to page."""
-    yes = {'yes','y', 'ye', ''}
-    no = {'no','n'}
-    quit = {'q','quit','exit'}
-    question = "Do you want to accept these changes to '%s' with summary '%s' ?\n" % (
-        page.title(),
-        summary,
-        )
-
-    if DRY:
-        choice = "n"
-    elif AUTO:
-        choice = "y"
+def uploader(filename, link=True):
+    """user that uploaded the video"""
+    history = (pywikibot.Page(SITE, filename)).getVersionHistory(reverse=True, total=1)
+    if not history:
+        return "Unknown"
+    if link:
+        return "[[User:%s|%s]]" % (history[0][2], history[0][2])
     else:
-        choice = input(question).lower()
-
-    if choice in yes:
-        out("\nAbout to make changes at : '%s'" % page.title())
-        pywikibot.showDiff(old_text, new_text)
-        #page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
-    elif choice in quit:
-        sys.exit(0)
-    else:
-        pass
-        
-
-def out(text, newline=True, date=False, color=None):
-    """Just output some text to the consoloe or log."""
-    if color:
-        text = "\03{%s}%s\03{default}" % (color, text)
-    dstr = (
-        "%s: " % datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
-        if date
-        else ""
-    )
-    pywikibot.stdout("%s%s" % (dstr, text), newline=newline)
+        return history[0][2]
 
 def isOwnWork(pagetext):
     if (LowerCasePageText.find('{{own}}') != -1):
         return True
     elif (LowerCasePageText.find('own work') != -1):
         return True
+
+def informatdate():
+    return (datetime.utcnow()).strftime('%Y-%m-%d')
 
 def IsMarkedForDeletion(pagetext):
     LowerCasePageText = pagetext.lower()
@@ -62,16 +34,6 @@ def IsMarkedForDeletion(pagetext):
         (LowerCasePageText.find('{{speedy') != -1)
         ):
             return True
-
-def uploader(filename, link=True):
-    """user that uploaded the video"""
-    history = (pywikibot.Page(SITE, filename)).getVersionHistory(reverse=True, total=1)
-    if not history:
-        return "Unknown"
-    if link:
-        return "[[User:%s|%s]]" % (history[0][2], history[0][2])
-    else:
-        return history[0][2]
 
 def DetectSite():
     if (LowerCasePageText.find('{{from vimeo') != -1):
@@ -143,6 +105,43 @@ def ChannelChk(ChannelId):
     if (TextOfPageOfBadChannelId.find(ChannelId) != -1):
         return "Bad"
     return "Unknown"
+
+def commit(old_text, new_text, page, summary):
+    """Show diff and submit text to page."""
+    yes = {'yes','y', 'ye', ''}
+    no = {'no','n'}
+    quit = {'q','quit','exit'}
+    question = "Do you want to accept these changes to '%s' with summary '%s' ?\n" % (
+        page.title(),
+        summary,
+        )
+
+    if DRY:
+        choice = "n"
+    elif AUTO:
+        choice = "y"
+    else:
+        choice = input(question).lower()
+
+    if choice in yes:
+        out("\nAbout to make changes at : '%s'" % page.title())
+        pywikibot.showDiff(old_text, new_text)
+        #page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
+    elif choice in quit:
+        sys.exit(0)
+    else:
+        pass
+
+def out(text, newline=True, date=False, color=None):
+    """Just output some text to the consoloe or log."""
+    if color:
+        text = "\03{%s}%s\03{default}" % (color, text)
+    dstr = (
+        "%s: " % datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        if date
+        else ""
+    )
+    pywikibot.stdout("%s%s" % (dstr, text), newline=newline)
 
 def checkfiles():
     category = pywikibot.Category(SITE,'License_review_needed_(video)')
