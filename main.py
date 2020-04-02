@@ -122,7 +122,6 @@ def ChannelChk(ChannelId):
     if (TextOfPageOfBadChannelId.find(ChannelId) != -1):
         return "Bad"
     return "Unknown"
-    
 
 def checkfiles():
     category = pywikibot.Category(SITE,'License_review_needed_(video)')
@@ -170,6 +169,7 @@ def checkfiles():
                 except:
                     continue
             SourceURL = "https://vimeo.com/%s" % VimeoVideoId
+
             if archived_url(SourceURL) == None:
                 continue
             else:
@@ -180,15 +180,15 @@ def checkfiles():
             else:
                 webpage = archived_webpage(archive_url)
 
-            matches = re.finditer(r"http(?:s|)\:\/\/vimeo\.com\/(.{0,30})\/video", webpage, re.MULTILINE)
-            for m in matches:
-                VimeoChannelId = m.group(1)
             try:
-                VimeoChannelId
+                VimeoChannelId = re.search(r"http(?:s|)\:\/\/vimeo\.com\/(.{0,30})\/video", webpage, re.MULTILINE).group(1)
             except:
                 continue
-            if check_channel(VimeoChannelId) == "Trusted":pass
-            if check_channel(VimeoChannelId) == "Bad":continue
+            if check_channel(VimeoChannelId) == "Trusted":pass  #TODO : PASS LR similarly youtube
+
+            if check_channel(VimeoChannelId) == "Bad":
+                out("IGNORE - Bad Channel %s" % VimeoChannelId, color="red")
+                continue
 
             StandardCreativeCommonsUrlRegex = re.compile('https\:\/\/creativecommons\.org\/licenses\/(.*?)\/(.*?)\/')
             Allowedlicenses = ['by-sa', 'by', 'publicdomain', 'cc0']
