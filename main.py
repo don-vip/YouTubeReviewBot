@@ -422,6 +422,9 @@ def checkfiles():
             continue
 
 def main(*args):
+    global SITE
+    global DRY
+    global AUTO
     DRY = None
     AUTO = None
     for arg in sys.argv[1:]:
@@ -435,10 +438,6 @@ def main(*args):
             continue
     args = pywikibot.handle_args(*args)
     SITE = pywikibot.Site()
-
-    global SITE
-    global DRY
-    global AUTO
 
     if not SITE.logged_in():
         SITE.login()
