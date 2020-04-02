@@ -344,7 +344,8 @@ def checkfiles():
 
             # Clean shit, if present in Video title or Channel Name
             YouTubeChannelName = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeChannelName)
-            YouTubeVideoTitle  = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeVideoTitle )
+            YouTubeVideoTitle  = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeVideoTitle)
+
             TAGS = str(
                 "{{YouTubeReview"
                 "|id=" + YouTubeVideoId + 
