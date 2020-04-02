@@ -148,9 +148,11 @@ def checkfiles():
     category = pywikibot.Category(SITE,'License_review_needed_(video)')
     RegexOfLicenseReviewTemplate = r"{{(?:|\s*)[LlVvYy][IiOo][CcMmUu][EeTt][NnUuOo](?:[SsBb][Ee]|)(?:|\s*)[Rr][Ee][Vv][Ii][Ee][Ww](?:|\s*)(?:\|.*|)}}"
     gen = pagegenerators.CategorizedPageGenerator(category)
+    file_count = 0
     for page in gen:
+        file_count = 1 + file_count
         filename = page.title()
-        print("\n"+filename)
+        out("\n%d - %s" % (file_count,filename), color="white")
         page = pywikibot.Page(SITE, filename)
         pagetext = page.get(get_redirect=True)
         old_text = pagetext
