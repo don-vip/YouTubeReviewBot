@@ -360,7 +360,16 @@ def checkfiles():
                 "}}"
                 )
 
-            print(TAGS)
+            out(
+                str(
+                "video Id : " + YouTubeVideoId + 
+                "\nChannel Name : " + YouTubeChannelName + 
+                "\nChannel Id : " + YouTubeChannelId +
+                "\nVideo Title : " + YouTubeVideoTitle + 
+                "\nArchive : " + archive_url +
+                "\nDate : " + informatdate()),
+                color="white",
+                )
 
             if ChannelChk(YouTubeChannelId) == "Trusted":
                 TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
