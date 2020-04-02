@@ -169,7 +169,7 @@ def checkfiles():
             try:
                 commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
-                out("Page is locked '%s'." % error, 'red')
+                out("Page is locked '%s'." % error, color='red')
                 continue
 
         elif DetectSite() == "Flickr":
@@ -178,7 +178,7 @@ def checkfiles():
             try:
                 commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
-                out("Page is locked '%s'." % error, 'red')
+                out("Page is locked '%s'." % error, color='red')
                 continue
 
         elif DetectSite() == "Vimeo":
@@ -190,15 +190,18 @@ def checkfiles():
                 try:
                     VimeoVideoId = re.search(r"vimeo\.com\/((?:[0-9_]+))",pagetext).group(1)
                 except:
+                    out("PARSING FAILED - Can't get VimeoVideoId", color='red')
                     continue
             SourceURL = "https://vimeo.com/%s" % VimeoVideoId
 
             if archived_url(SourceURL) != None:
                 archive_url = archived_url(SourceURL)
             else:
+                out("WAYBACK FAILED - Can't get archive_url", color='red')
                 continue
 
             if archived_webpage(archive_url) == None:
+                out("WAYBACK FAILED - Can't get webpage", color='red')
                 continue
             else:
                 webpage = archived_webpage(archive_url)
@@ -206,6 +209,7 @@ def checkfiles():
             try:
                 VimeoChannelId = re.search(r"http(?:s|)\:\/\/vimeo\.com\/(.{0,30})\/video", webpage, re.MULTILINE).group(1)
             except:
+                out("PARSING FAILED - Can't get VimeoChannelId", color='red')
                 continue
             if check_channel(VimeoChannelId) == "Trusted":pass  #TODO : PASS LR similarly youtube
 
@@ -231,6 +235,7 @@ def checkfiles():
                     continue
                 else:pass
             else:
+                out("Creative commons Not found - File is not licensed under any type of creative commons license including CC-NC/ND", color='red')
                 continue
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{VimeoReview|id=%s|license=%s-%s|ChannelID=%s|archive=%s|date=%s}}" % (
                 VimeoVideoId,
@@ -245,6 +250,7 @@ def checkfiles():
             try:
                 commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
+                out("Page is locked '%s'." % error, color='red')
                 continue
 
         elif DetectSite() == "YouTube":
@@ -254,13 +260,16 @@ def checkfiles():
                 try:
                     YouTubeVideoId = re.search(r"https?\:\/\/(?:www|m|)(?:|\.)youtube\.com/watch\Wv\=([^\"&?\/ ]{11})",pagetext).group(1)
                 except:
+                    out("PARSING FAILED - Can't get YouTubeVideoId", color='red')
                     continue
             SourceURL = "https://www.youtube.com/watch?v=%s" % YouTubeVideoId
             if archived_url(SourceURL) != None:
                 archive_url = archived_url(SourceURL)
             else:
+                out("WAYBACK FAILED - Can't get archive_url", color='red')
                 continue
             if archived_webpage(archive_url) == None:
+                out("WAYBACK FAILED - Can't get webpage", color='red')
                 continue
             else:
                 webpage = archived_webpage(archive_url)
@@ -290,7 +299,7 @@ def checkfiles():
                     try:
                         commit(not_available_old_text, not_available_new_text, not_available_page, EditSummary)
                     except pywikibot.LockedPage as error:
-                        out("Page is locked '%s'." % error, 'red')
+                        out("Page is locked '%s'." % error, color='red')
                         continue
             else:
                 pass
@@ -367,7 +376,7 @@ def checkfiles():
             try:
                 commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
-                print(colored("Page is locked '%s'." % error, 'red'))
+                out("Page is locked '%s'." % error, color='red')
                 continue
         else:
             continue
