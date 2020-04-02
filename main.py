@@ -405,13 +405,36 @@ def checkfiles():
         else:
             continue
 
-def main():
+def main(*args):
     global SITE
     global DRY
     global AUTO
-    SITE = pywikibot.Site()
     DRY = None
     AUTO = None
+    for arg in sys.argv[1:]:
+        if arg == "-auto":
+            AUTO = True
+            sys.argv.remove(arg)
+            continue
+        elif arg == "-dry":
+            DRY = True
+            sys.argv.remove(arg)
+            continue
+    args = pywikibot.handle_args(*args)
+    SITE = pywikibot.Site()
+    # Abort on unknown arguments
+    for arg in args:
+        if arg not in [
+            "-auto",
+            "-dry",
+            ]:
+                out(
+                    "Warning - unknown argument '%s' aborting, use -auto for automatic review or -dry to test and not submit the edits. see -help for pywikibot help" % arg,
+                    color="lightred",
+                    )
+                sys.exit(0)
+            
+    
     checkfiles()
 
 if __name__ == "__main__":
