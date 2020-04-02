@@ -14,7 +14,10 @@ def commit(old_text, new_text, page, summary):
     yes = {'yes','y', 'ye', ''}
     no = {'no','n'}
     quit = {'q','quit','exit'}
-    question = "Do you want to accept these changes to '%s' with summary '%s' ?" % (page.title(), summary)
+    question = "Do you want to accept these changes to '%s' with summary '%s' ?" % (
+        page.title(),
+        summary,
+        )
     choice = input(question).lower()
     if choice in yes:
         out("\nAbout to make changes at : '%s'" % page.title())
