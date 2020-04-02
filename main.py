@@ -208,7 +208,7 @@ def checkfiles():
             
             # Try to get the ChannelID
             try:
-                VimeoChannelId = re.search(r"http(?:s|)\:\/\/vimeo\.com\/(.{0,30})\/video", webpage, re.MULTILINE).group(1)
+                VimeoChannelId = re.search(r"http(?:s|)\:\/\/vimeo\.com\/(user[0-9]{0,30})\/video", webpage, re.MULTILINE).group(1)
             except:
                 out("PARSING FAILED - Can't get VimeoChannelId", color='red')
                 continue
