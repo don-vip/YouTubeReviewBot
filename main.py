@@ -245,8 +245,15 @@ def checkfiles():
                 archive_url,
                 informatdate()),
                 old_text)
-            
-            EditSummary = "License review passed ", " Channel Name/ID:", VimeoChannelId, " Video ID:", VimeoVideoId, " License :", licensesP1,"-",licensesP2, "Archived Video on WayBack Machine"
+            VimeoVideoTitle = ""
+            EditSummary = "LR Passed, %s , by %s under terms of %-% at https://vimeo.com/%s (Archived - WayBack Machine)" % (
+                VimeoVideoTitle,
+                VimeoChannelId,
+                licensesP1,
+                licensesP2,
+                VimeoVideoId,
+                )
+
             try:
                 commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
