@@ -70,10 +70,8 @@ def archived_webpage(archive_url):
     iters = 0
     while status == "Wait":
         iters = iters + 1
-        if not archive_url:
-            status = "Stop"
-        req = Request(archive_url,headers={'User-Agent': 'User:YouTubeReviewBot on wikimedia commons'})
         try:
+            req = Request(archive_url,headers={'User-Agent': 'User:YouTubeReviewBot on wikimedia commons'})
             webpage = urlopen(req).read().decode('utf-8')
             status = "Done"
         except:
