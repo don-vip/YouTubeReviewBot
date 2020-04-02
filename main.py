@@ -14,7 +14,7 @@ def commit(old_text, new_text, page, summary):
     yes = {'yes','y', 'ye', ''}
     no = {'no','n'}
     quit = {'q','quit','exit'}
-    choice = raw_input().lower()
+    choice = input().lower()
     if choice in yes:
         out("\nAbout to make changes at : '%s'" % page.title())
         pywikibot.showDiff(old_text, new_text)
