@@ -378,10 +378,10 @@ def checkfiles():
 
             out(
                 str(
-                "video Id : " + YouTubeVideoId + 
-                "\nChannel Name : " + YouTubeChannelName + 
+                "video Id : " + YouTubeVideoId +
+                "\nChannel Name : " + YouTubeChannelName +
                 "\nChannel Id : " + YouTubeChannelId +
-                "\nVideo Title : " + YouTubeVideoTitle + 
+                "\nVideo Title : " + YouTubeVideoTitle +
                 "\nArchive : " + archive_url +
                 "\nDate : " + informatdate()),
                 color="white",
