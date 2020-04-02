@@ -30,12 +30,10 @@ def commit(old_text, new_text, page, summary):
         out("\nAbout to make changes at : '%s'" % page.title())
         pywikibot.showDiff(old_text, new_text)
         #page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
-    elif choice in no:
-        pass
     elif choice in quit:
         sys.exit(0)
     else:
-        sys.stdout.write("Please respond with 'yes' , 'no' or 'quit")
+        pass
         
 
 def out(text, newline=True, date=False, color=None):
