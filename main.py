@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import pywikibot
-from pywikibot import pagegenerators
-from datetime import datetime
-import savepagenow
-import re
-from urllib.request import Request, urlopen
 
+import pywikibot
+import savepagenow, re
+from datetime import datetime
+from pywikibot import pagegenerators
+from urllib.request import Request, urlopen
 
 def informatdate():
     return (datetime.utcnow()).strftime('%Y-%m-%d')
