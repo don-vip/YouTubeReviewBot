@@ -342,7 +342,7 @@ def checkfiles():
                 except AttributeError:
                     continue
 
-            # Clean shit, if present in Video title or Channel Name
+            # Remove unwanted sysmbols that may fuck-up the wiki-text, if present in Video title or Channel Name
             YouTubeChannelName = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeChannelName)
             YouTubeVideoTitle  = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeVideoTitle)
 
