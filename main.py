@@ -190,10 +190,10 @@ def checkfiles():
                     continue
             SourceURL = "https://vimeo.com/%s" % VimeoVideoId
 
-            if archived_url(SourceURL) == None:
-                continue
-            else:
+            if archived_url(SourceURL) != None:
                 archive_url = archived_url(SourceURL)
+            else:
+                continue
 
             if archived_webpage(archive_url) == None:
                 continue
@@ -246,10 +246,10 @@ def checkfiles():
                 except:
                     continue
             SourceURL = "https://www.youtube.com/watch?v=%s" % YouTubeVideoId
-            if archived_url(SourceURL) == None:
-                continue
-            else:
+            if archived_url(SourceURL) != None:
                 archive_url = archived_url(SourceURL)
+            else:
+                continue
             if archived_webpage(archive_url) == None:
                 continue
             else:
@@ -275,7 +275,7 @@ def checkfiles():
                     try:
                         commit(not_available_old_text, not_available_new_text, not_available_page, EditSummary)
                     except pywikibot.LockedPage as error:
-                        out("Page is locked '%s'." % error, 'red'))
+                        out("Page is locked '%s'." % error, 'red')
                         continue
             else:
                 pass
@@ -331,6 +331,7 @@ def checkfiles():
                 "|date=" + informatdate() +
                 "}}"
                 )
+
             print(TAGS)
             YouTubeLicense = "CC BY 3.0"
             TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
