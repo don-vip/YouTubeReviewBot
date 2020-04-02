@@ -205,13 +205,14 @@ def checkfiles():
                 continue
             else:
                 webpage = archived_webpage(archive_url)
-
+            
+            # Try to get the ChannelID
             try:
                 VimeoChannelId = re.search(r"http(?:s|)\:\/\/vimeo\.com\/(.{0,30})\/video", webpage, re.MULTILINE).group(1)
             except:
                 out("PARSING FAILED - Can't get VimeoChannelId", color='red')
                 continue
-            if check_channel(VimeoChannelId) == "Trusted":pass  #TODO : PASS LR similarly youtube
+            if check_channel(VimeoChannelId) == "Trusted":pass  #TODO : PASS LR similar as YouTube
 
             if check_channel(VimeoChannelId) == "Bad":
                 out("IGNORE - Bad Channel %s" % VimeoChannelId, color="red")
