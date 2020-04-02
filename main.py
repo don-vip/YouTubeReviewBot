@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-
+import re
+import sys
 import pywikibot
-import savepagenow, re, sys
+import savepagenow
 from datetime import datetime
 from pywikibot import pagegenerators
 from urllib.request import Request, urlopen
+
 
 def uploader(filename, link=True):
     """user that uploaded the video"""
@@ -211,13 +213,20 @@ def checkfiles():
                 continue
 
             StandardCreativeCommonsUrlRegex = re.compile('https\:\/\/creativecommons\.org\/licenses\/(.*?)\/(.*?)\/')
-            Allowedlicenses = ['by-sa', 'by', 'publicdomain', 'cc0']
+
+            Allowedlicenses = [
+                'by-sa',
+                'by',
+                'publicdomain',
+                'cc0'
+                ]
 
             if re.search(r"creativecommons.org", webpage):
                 matches = StandardCreativeCommonsUrlRegex.finditer(webpage)
                 for m in matches:
                     licensesP1, licensesP2  = (m.group(1)), (m.group(2))
                 if licensesP1 not in Allowedlicenses:
+                    out("The file is licensed under %-%, but it's not allowed on commons" % (licensesP1,licensesP2) , color="red")
                     continue
                 else:pass
             else:
