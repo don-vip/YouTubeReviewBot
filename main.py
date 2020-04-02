@@ -110,9 +110,8 @@ def ChannelChk(ChannelId):
 def commit(old_text, new_text, page, summary):
     """Show diff and submit text to page."""
     yes = {'yes','y', 'ye', ''}
-    no = {'no','n'}
     quit = {'q','quit','exit'}
-    question = "Do you want to accept these changes to '%s' with summary '%s' ?\n" % (
+    question = "Do you want to accept these changes to '%s' with summary '%s' ? [Yy]es / [Nn]o / [Qq]uit \n" % (
         page.title(),
         summary,
         )
@@ -243,8 +242,12 @@ def checkfiles():
                     continue
                 else:pass
             else:
-                out("Creative commons Not found - File is not licensed under any type of creative commons license including CC-NC/ND", color='red')
+                out(
+                    "Creative commons Not found - File is not licensed under any type of creative commons license including CC-NC/ND",
+                    color='red'
+                    )
                 continue
+
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{VimeoReview|id=%s|license=%s-%s|ChannelID=%s|archive=%s|date=%s}}" % (
                 VimeoVideoId,
                 licensesP1,
@@ -253,6 +256,7 @@ def checkfiles():
                 archive_url,
                 informatdate()),
                 old_text)
+
             EditSummary = "LR Passed, %s , by %s under terms of %-% at https://vimeo.com/%s (Archived - WayBack Machine)" % (
                 VimeoVideoTitle,
                 VimeoChannelId,
