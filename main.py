@@ -361,10 +361,12 @@ def checkfiles():
 
             if ChannelChk(YouTubeChannelId) == "Trusted":
                 TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
+                YouTubeLicense = ""
             else:
                 TrustTextAppend = ""
-            YouTubeLicense = "CC BY 3.0"
-            EditSummary = "%s LR Passed, %s, by %s (%s) under terms of %s at www.youtube.com/watch?v=%s (Archived - WayBack Machine)" % (
+                YouTubeLicense = "under terms of CC BY 3.0"
+
+            EditSummary = "%s LR Passed, %s, by %s (%s) %s at www.youtube.com/watch?v=%s (Archived - WayBack Machine)" % (
                 TrustTextAppend,
                 YouTubeVideoTitle,
                 YouTubeChannelName,
@@ -372,6 +374,7 @@ def checkfiles():
                 YouTubeLicense,
                 YouTubeVideoId,
                 )
+
             if re.search(r"Creative Commons", webpage) is not None or ChannelChk(YouTubeChannelId) == "Trusted":
                 new_text = re.sub(RegexOfLicenseReviewTemplate, TAGS, old_text)
             else:
