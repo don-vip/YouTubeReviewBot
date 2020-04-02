@@ -9,7 +9,7 @@ from urllib.request import Request, urlopen
 
 
 def uploader(filename, link=True):
-    """user that uploaded the video"""
+    """User that uploaded the video."""
     history = (pywikibot.Page(SITE, filename)).getVersionHistory(reverse=True, total=1)
     if not history:
         return "Unknown"
