@@ -18,7 +18,14 @@ def commit(old_text, new_text, page, summary):
         page.title(),
         summary,
         )
-    choice = input(question).lower()
+
+    if DRY:
+        choice = "n"
+    elif AUTO:
+        choice = "y"
+    else:
+        choice = input(question).lower()
+
     if choice in yes:
         out("\nAbout to make changes at : '%s'" % page.title())
         pywikibot.showDiff(old_text, new_text)
@@ -354,6 +361,8 @@ def checkfiles():
 
 def main():
     global SITE
+    global DRY
+    global AUTO
     SITE = pywikibot.Site()
     checkfiles()
 
