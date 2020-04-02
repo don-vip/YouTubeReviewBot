@@ -205,6 +205,7 @@ def checkfiles():
                 archive_url,
                 informatdate()),
                 old_text)
+            
             EditSummary = "License review passed ", " Channel Name/ID:", VimeoChannelId, " Video ID:", VimeoVideoId, " License :", licensesP1,"-",licensesP2, "Archived Video on WayBack Machine"
             try:
                 commit(old_text, new_text, page, EditSummary)
@@ -302,10 +303,16 @@ def checkfiles():
                 "}}"
                 )
             print(TAGS)
-
+            YouTubeLicense = "CC BY 3.0"
             TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
             EditSummary = TrustTextAppend, "License review passed", " Title of video:", YouTubeVideoTitle, "Channel Name:", YouTubeChannelName , " Video ID:", YouTubeVideoId,  " Channel ID:", YouTubeChannelId, "Archived Video on WayBack Machine"
-
+            EditSummary = "LR Passed, %s, by %s (%s) under terms of %s at www.youtube.com/watch?v=%s (Archived - WayBack Machine)" % (
+                YouTubeVideoTitle,
+                YouTubeChannelName,
+                YouTubeChannelId,
+                YouTubeLicense,
+                YouTubeVideoId,
+                )
             if re.search(r"Creative Commons", webpage) is not None or ChannelChk(YouTubeChannelId) == "Trusted":
                 new_text = re.sub(RegexOfLicenseReviewTemplate, TAGS, old_text)
             else:
