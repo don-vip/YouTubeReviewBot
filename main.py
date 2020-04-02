@@ -72,6 +72,7 @@ def archived_url(SourceURL):
     while status == "Wait":
         iters = iters + 1
         if iters > 5:
+            return None
             status = "Stop"
         try:
             archive_url = savepagenow.capture(SourceURL)
@@ -173,10 +174,12 @@ def checkfiles():
                 continue
             else:
                 archive_url = archived_url(SourceURL)
+
             if archived_webpage(archive_url) == None:
                 continue
             else:
                 webpage = archived_webpage(archive_url)
+
             matches = re.finditer(r"http(?:s|)\:\/\/vimeo\.com\/(.{0,30})\/video", webpage, re.MULTILINE)
             for m in matches:
                 VimeoChannelId = m.group(1)
