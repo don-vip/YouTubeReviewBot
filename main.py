@@ -21,6 +21,8 @@ def commit(old_text, new_text, page, summary):
         #page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
     elif choice in no:
         pass
+    elif choice in quit:
+        sys.exit(0)
     else:
         sys.stdout.write("Please respond with 'yes' , 'no' or 'quit")
         
