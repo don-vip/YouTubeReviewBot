@@ -420,14 +420,14 @@ def checkfiles():
                 continue
         else:
             continue
+DRY = None
+AUTO = None
+SITE = None
 
 def main(*args):
     global SITE
     global DRY
     global AUTO
-
-    DRY = None
-    AUTO = None
     for arg in sys.argv[1:]:
         if arg == "-auto":
             AUTO = True
@@ -453,7 +453,6 @@ def main(*args):
                     color="lightred",
                     )
                 sys.exit(0)
-            
     
     checkfiles()
 
