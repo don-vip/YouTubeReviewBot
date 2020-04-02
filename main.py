@@ -127,7 +127,7 @@ def commit(old_text, new_text, page, summary):
     if choice in yes:
         out("\nAbout to make changes at : '%s'" % page.title())
         pywikibot.showDiff(old_text, new_text)
-        #page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
+        page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
     elif choice in quit:
         sys.exit(0)
     else:
@@ -422,6 +422,8 @@ def main(*args):
             continue
     args = pywikibot.handle_args(*args)
     SITE = pywikibot.Site()
+    if not SITE.logged_in():
+        SITE.login()
     # Abort on unknown arguments
     for arg in args:
         if arg not in [
