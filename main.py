@@ -217,6 +217,13 @@ def checkfiles():
             if check_channel(VimeoChannelId) == "Bad":
                 out("IGNORE - Bad Channel %s" % VimeoChannelId, color="red")
                 continue
+            
+            # Try to get video title
+            try:
+                VimeoVideoTitle = re.search(r"<title>(.*?) on Vimeo<\/title>", webpage, re.MULTILINE).group(1)
+            except:
+                out("PARSING FAILED - Can't get VimeoVideoTitle", color='red')
+                continue
 
             StandardCreativeCommonsUrlRegex = re.compile('https\:\/\/creativecommons\.org\/licenses\/(.*?)\/(.*?)\/')
 
@@ -246,7 +253,6 @@ def checkfiles():
                 archive_url,
                 informatdate()),
                 old_text)
-            VimeoVideoTitle = ""
             EditSummary = "LR Passed, %s , by %s under terms of %-% at https://vimeo.com/%s (Archived - WayBack Machine)" % (
                 VimeoVideoTitle,
                 VimeoChannelId,
