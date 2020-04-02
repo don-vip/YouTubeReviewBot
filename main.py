@@ -181,8 +181,6 @@ def checkfiles():
                 continue
 
         elif DetectSite() == "Vimeo":
-            VimeoUrlPattern = re.compile(r'vimeo\.com\/((?:[0-9_]+))')
-            FromVimeoRegex = re.compile(r'{{\s*?[Ff]rom\s[Vv]imeo\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1\=|)(?:\s*?|)([0-9_]+)')
             try:
                 VimeoVideoId = re.search(r"{{\s*?[Ff]rom\s[Vv]imeo\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1\=|)(?:\s*?|)([0-9_]+)",pagetext).group(1)
             except AttributeError:
