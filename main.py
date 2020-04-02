@@ -146,7 +146,7 @@ def out(text, newline=True, date=False, color=None):
 
 def checkfiles():
     category = pywikibot.Category(SITE,'License_review_needed_(video)')
-    RegexOfLicenseReviewTemplate = r"{{(?:|\s*)[LlVvYy][IiOo][CcMmUu][EeTt][NnUuOo](?:[SsBb][Ee]|)(?:|\s*)[Rr][Ee][Vv][Ii][Ee][Ww](?:|\s*)(?:\|.*|)}}"
+    RegexOfLicenseReviewTemplate = r"{{(?:|\s*)[LlVvYy][IiOo][CcMmUu][EeTt][NnUuOo](?:[SsBbCc][Ee]|)(?:|\s*)[Rr][Ee][Vv][Ii][Ee][Ww](?:|\s*)(?:\|.*|)}}"
     gen = pagegenerators.CategorizedPageGenerator(category)
     file_count = 0
     for page in gen:
@@ -371,9 +371,13 @@ def checkfiles():
             if re.search(r"Creative Commons", webpage) is not None or ChannelChk(YouTubeChannelId) == "Trusted":
                 new_text = re.sub(RegexOfLicenseReviewTemplate, TAGS, old_text)
             else:
+                out("Video is not Creative Commons 3.0 licensed on YouTube nor from a Trusted Channel", color="red")
                 continue
-            if new_text == old_text:continue
-            else:pass
+            if new_text == old_text:
+                out("IGONRE - New text was equal to Old text.", color="red")
+                continue
+            else:
+                pass
             try:
                 commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
