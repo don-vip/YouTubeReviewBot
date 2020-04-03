@@ -3,10 +3,9 @@ import re
 import sys
 import pywikibot
 import savepagenow
-from datetime import datetime
+from datetime import datetime, timezone
 from pywikibot import pagegenerators
 from urllib.request import Request, urlopen
-
 
 def uploader(filename, link=True):
     """User that uploaded the video."""
@@ -19,6 +18,10 @@ def uploader(filename, link=True):
         return "[[User:%s|%s]]" % (username, username)
     else:
         return username
+
+def upload_date(filename):
+    for info in (pywikibot.Page(SITE, filename)).revisions(reverse=True, total=1):
+        return datetime.strptime(str(info.timestamp), "%Y-%m-%dT%H:%M:%S%z")
 
 def isOwnWork(pagetext):
     if (LowerCasePageText.find('{{own}}') != -1):
@@ -181,9 +184,17 @@ def checkfiles():
             "Identified as %s" % DetectSite(),
             color="yellow",
             )
+
         if IsMarkedForDeletion(pagetext) == True:
             out(
                 "IGNORE - File is marked for deletion",
+                color='red',
+                )
+            continue
+
+        elif (datetime.now(timezone.utc)-upload_date(filename)).days > 61:
+            out(
+                "File is older than 2 months, will not process it.",
                 color='red',
                 )
             continue
