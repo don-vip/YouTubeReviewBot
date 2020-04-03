@@ -71,7 +71,10 @@ def archived_webpage(archive_url):
     while status == "Wait":
         iters = iters + 1
         try:
-            req = Request(archive_url,headers={'User-Agent': 'User:YouTubeReviewBot on wikimedia commons'})
+            req = Request(
+                archive_url,
+                headers={'User-Agent': 'User:YouTubeReviewBot on wikimedia commons'},
+                )
             webpage = urlopen(req).read().decode('utf-8')
             status = "Done"
         except:
@@ -96,17 +99,6 @@ def OwnWork():
     else:
         return False
 
-def ChannelChk(ChannelId):
-    PageOfTrustedChannelId = pywikibot.Page(SITE, "User:YouTubeReviewBot/Trusted")
-    TextOfPageOfTrustedChannelId = PageOfTrustedChannelId.get(get_redirect=True, force=True)
-    if (TextOfPageOfTrustedChannelId.find(ChannelId) != -1):
-        return "Trusted"
-    PageOfBadChannelId = pywikibot.Page(SITE, "User:YouTubeReviewBot/bad-authors")
-    TextOfPageOfBadChannelId = PageOfBadChannelId.get(get_redirect=True, force=True)
-    if (TextOfPageOfBadChannelId.find(ChannelId) != -1):
-        return "Bad"
-    return "Unknown"
-
 def commit(old_text, new_text, page, summary):
     """Show diff and submit text to page."""
     yes = {'yes','y', 'ye', ''}
@@ -124,11 +116,25 @@ def commit(old_text, new_text, page, summary):
         choice = input(question).lower()
 
     if choice in exit:
-        out("\nAbout to make changes at : '%s'" % page.title())
-        pywikibot.showDiff(old_text, new_text)
-        page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
+        out(
+            "\nAbout to make changes at : '%s'" % page.title()
+            )
+
+        pywikibot.showDiff(
+            old_text,
+            new_text,
+            )
+    
+        page.put(
+            new_text,
+            summary=summary,
+            watchArticle=True,
+            minorEdit=False,
+            )
+
     elif choice in quit:
         sys.exit(0)
+
     else:
         pass
 
@@ -151,15 +157,30 @@ def checkfiles():
     for page in gen:
         file_count = 1 + file_count
         filename = page.title()
-        out("\n%d - %s" % (file_count,filename), color="white")
-        page = pywikibot.Page(SITE, filename)
+
+        out(
+            "\n%d - %s" % (file_count,filename),
+            color="white",
+            )
+
+        page = pywikibot.Page(
+            SITE,
+            filename,
+            )
+
         pagetext = page.get(get_redirect=True)
         old_text = pagetext
         global LowerCasePageText
         LowerCasePageText = pagetext.lower()
-        out("Identified as %s" % DetectSite(), color="yellow")
+        out(
+            "Identified as %s" % DetectSite(),
+            color="yellow",
+            )
         if IsMarkedForDeletion(pagetext) == True:
-            out("IGNORE - File is marked for deletion", color='red')
+            out(
+                "IGNORE - File is marked for deletion",
+                color='red',
+                )
             continue
 
         elif OwnWork():
@@ -369,7 +390,7 @@ def checkfiles():
                     out("PARSING FAILED - Can't get YouTubeChannelId", color='red')
                     continue
 
-            if ChannelChk(YouTubeChannelId) == "Bad":
+            if check_channel(YouTubeChannelId) == "Bad":
                 out("IGONRE - Bad Channel %s" % YouTubeChannelId , color="red")
                 continue
 
@@ -425,7 +446,7 @@ def checkfiles():
                 color="white",
                 )
 
-            if ChannelChk(YouTubeChannelId) == "Trusted":
+            if check_channel(YouTubeChannelId) == "Trusted":
                 TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
                 YouTubeLicense = ""
             else:
@@ -441,7 +462,7 @@ def checkfiles():
                 YouTubeVideoId,
                 )
 
-            if re.search(r"Creative Commons", webpage) is not None or ChannelChk(YouTubeChannelId) == "Trusted":
+            if re.search(r"Creative Commons", webpage) is not None or check_channel(YouTubeChannelId) == "Trusted":
                 new_text = re.sub(
                     RegexOfLicenseReviewTemplate,
                     TAGS,
