@@ -77,7 +77,8 @@ def archived_webpage(archive_url):
                 )
             webpage = urlopen(req).read().decode('utf-8')
             status = "Done"
-        except:
+        except Exception as e:
+            out(e, color="red")
             pass
         if iters > 5:
             status = "Stop"
@@ -287,7 +288,7 @@ def checkfiles():
             EditSummary = "LR Passed, %s , by %s under terms of % at https://vimeo.com/%s (Archived - WayBack Machine)" % (
                 VimeoVideoTitle,
                 VimeoChannelId,
-                VimeoLicense,,
+                VimeoLicense,
                 VimeoVideoId,
                 )
 
