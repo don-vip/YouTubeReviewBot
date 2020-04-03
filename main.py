@@ -102,7 +102,7 @@ def OwnWork():
 def commit(old_text, new_text, page, summary):
     """Show diff and submit text to page."""
     yes = {'yes','y', 'ye', ''}
-    exit = {'q','quit','exit'}
+    esc = {'q','quit','exit'}
     question = "Do you want to accept these changes to '%s' with summary '%s' ? [Yy]es / [Nn]o / [Qq]uit \n" % (
         page.title(),
         summary,
@@ -115,7 +115,7 @@ def commit(old_text, new_text, page, summary):
     else:
         choice = input(question).lower()
 
-    if choice in exit:
+    if choice in yes:
         out(
             "\nAbout to make changes at : '%s'" % page.title()
             )
@@ -132,7 +132,7 @@ def commit(old_text, new_text, page, summary):
             minorEdit=False,
             )
 
-    elif choice in quit:
+    elif choice in esc:
         sys.exit(0)
 
     else:
