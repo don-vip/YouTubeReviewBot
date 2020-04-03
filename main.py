@@ -3,7 +3,7 @@ import re
 import sys
 import pywikibot
 import savepagenow
-from datetime import datetime, timezone
+from datetime import datetime
 from pywikibot import pagegenerators
 from urllib.request import Request, urlopen
 
@@ -22,7 +22,7 @@ def uploader(filename, link=True):
 def upload_date(filename):
     """upload date of the file."""
     for info in (pywikibot.Page(SITE, filename)).revisions(reverse=True, total=1):
-        return datetime.strptime(str(info.timestamp), "%Y-%m-%dT%H:%M:%S%Z")
+        return datetime.strptime(str(info.timestamp), "%Y-%m-%dT%H:%M:%SZ")
 
 def informatdate():
     """Current date in yyyy-mm-dd format."""
@@ -194,7 +194,7 @@ def checkfiles():
                 )
             continue
 
-        elif (datetime.now(timezone.utc)-upload_date(filename)).days > 61:
+        elif (datetime.utcnow()-upload_date(filename)).days > 61:
             out(
                 "File is older than 2 months, will not process it.",
                 color='red',
