@@ -10,13 +10,15 @@ from urllib.request import Request, urlopen
 
 def uploader(filename, link=True):
     """User that uploaded the video."""
-    history = (pywikibot.Page(SITE, filename)).getVersionHistory(reverse=True, total=1)
+    history = (pywikibot.Page(SITE, filename)).revisions(reverse=True, total=1)
+    for info in history:
+        username = (info.user)
     if not history:
         return "Unknown"
     if link:
-        return "[[User:%s|%s]]" % (history[0][2], history[0][2])
+        return "[[User:%s|%s]]" % (username, username)
     else:
-        return history[0][2]
+        return username
 
 def isOwnWork(pagetext):
     if (LowerCasePageText.find('{{own}}') != -1):
