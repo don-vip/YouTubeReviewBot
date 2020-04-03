@@ -22,7 +22,7 @@ def uploader(filename, link=True):
 def upload_date(filename):
     """upload date of the file."""
     for info in (pywikibot.Page(SITE, filename)).revisions(reverse=True, total=1):
-        return datetime.strptime(str(info.timestamp), "%Y-%m-%dT%H:%M:%S%z")
+        return datetime.strptime(str(info.timestamp), "%Y-%m-%dT%H:%M:%S%Z")
 
 def informatdate():
     """Current date in yyyy-mm-dd format."""
@@ -593,4 +593,3 @@ if __name__ == "__main__":
         main()
     finally:
         pywikibot.stopme()
-
