@@ -8,7 +8,7 @@ from pywikibot import pagegenerators
 from urllib.request import Request, urlopen
 
 def uploader(filename, link=True):
-    """User that uploaded the video."""
+    """User that uploaded the file."""
     history = (pywikibot.Page(SITE, filename)).revisions(reverse=True, total=1)
     for info in history:
         username = (info.user)
@@ -20,19 +20,16 @@ def uploader(filename, link=True):
         return username
 
 def upload_date(filename):
+    """upload date of the file."""
     for info in (pywikibot.Page(SITE, filename)).revisions(reverse=True, total=1):
         return datetime.strptime(str(info.timestamp), "%Y-%m-%dT%H:%M:%S%z")
 
-def isOwnWork(pagetext):
-    if (LowerCasePageText.find('{{own}}') != -1):
-        return True
-    elif (LowerCasePageText.find('own work') != -1):
-        return True
-
 def informatdate():
+    """Current date in yyyy-mm-dd format."""
     return (datetime.utcnow()).strftime('%Y-%m-%d')
 
 def IsMarkedForDeletion(pagetext):
+    """Determine if the file is marked for deletion."""
     LowerCasePageText = pagetext.lower()
     if (
         (LowerCasePageText.find('{{No permission since') != -1) or
@@ -43,6 +40,7 @@ def IsMarkedForDeletion(pagetext):
             return True
 
 def DetectSite():
+    """Identify the source website of the file."""
     if (LowerCasePageText.find('{{from vimeo') != -1):
         return "Vimeo"
     if (LowerCasePageText.find('{{from youtube') != -1):
@@ -55,6 +53,7 @@ def DetectSite():
         return "YouTube"
 
 def archived_url(SourceURL):
+    """Get a realtime archived url of the source url."""
     archive_url = None
     status = "Wait"
     iters = 0
@@ -70,6 +69,7 @@ def archived_url(SourceURL):
     return archive_url
 
 def archived_webpage(archive_url):
+    """Get the source code of the archived webpage."""
     webpage = None
     status = "Wait"
     iters = 0
@@ -89,6 +89,7 @@ def archived_webpage(archive_url):
     return webpage
 
 def check_channel(ChannelId):
+    """Check if the channel is trusted or bad."""
     if ChannelId in (pywikibot.Page(SITE, "User:YouTubeReviewBot/Trusted")).get(get_redirect=True, force=True):
         return "Trusted"
     elif ChannelId in (pywikibot.Page(SITE, "User:YouTubeReviewBot/bad-authors")).get(get_redirect=True, force=True):
@@ -97,6 +98,7 @@ def check_channel(ChannelId):
         return "Normal"
 
 def OwnWork():
+    """Check if own work by uploader."""
     if (LowerCasePageText.find('{{own}}') != -1):
         return True
     elif (LowerCasePageText.find('own work') != -1):
@@ -105,7 +107,7 @@ def OwnWork():
         return False
 
 def commit(old_text, new_text, page, summary):
-    """Show diff and submit text to page."""
+    """Show diff and submit text to the wiki server."""
     yes = {'yes','y', 'ye', ''}
     esc = {'q','quit','exit'}
     question = "Do you want to accept these changes to '%s' with summary '%s' ? [Yy]es / [Nn]o / [Qq]uit \n" % (
@@ -591,3 +593,4 @@ if __name__ == "__main__":
         main()
     finally:
         pywikibot.stopme()
+
