@@ -197,11 +197,19 @@ def checkfiles():
 
         elif DetectSite() == "Flickr":
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{FlickrReview}}" , old_text)
-            EditSummary = "@%s Marking for flickr review, file added to [[Category:Flickr videos review needed]]." % uploader(filename,link=True)
+            EditSummary = "@%s Marking for flickr review, file's added to [[Category:Flickr videos review needed]]." % uploader(filename,link=True)
             try:
-                commit(old_text, new_text, page, EditSummary)
+                commit(
+                    old_text,
+                    new_text,
+                    page,
+                    EditSummary,
+                    )
             except pywikibot.LockedPage as error:
-                out("Page is locked '%s'." % error, color='red')
+                out(
+                    "Page is locked '%s'." % error,
+                    color='red',
+                    )
                 continue
 
         elif DetectSite() == "Vimeo":
@@ -218,11 +226,17 @@ def checkfiles():
             if archived_url(SourceURL) != None:
                 archive_url = archived_url(SourceURL)
             else:
-                out("WAYBACK FAILED - Can't get archive_url", color='red')
+                out(
+                    "WAYBACK FAILED - Can't get archive_url",
+                    color='red',
+                    )
                 continue
 
             if archived_webpage(archive_url) == None:
-                out("WAYBACK FAILED - Can't get webpage", color='red')
+                out(
+                    "WAYBACK FAILED - Can't get webpage",
+                    color='red',
+                    )
                 continue
             else:
                 webpage = archived_webpage(archive_url)
@@ -231,19 +245,29 @@ def checkfiles():
             try:
                 VimeoChannelId = re.search(r"http(?:s|)\:\/\/vimeo\.com\/(user[0-9]{0,30})\/video", webpage, re.MULTILINE).group(1)
             except:
-                out("PARSING FAILED - Can't get VimeoChannelId", color='red')
+                out(
+                    "PARSING FAILED - Can't get VimeoChannelId",
+                    color='red',
+                    )
                 continue
+
             if check_channel(VimeoChannelId) == "Trusted":pass  #TODO : PASS LR similar as YouTube
 
             if check_channel(VimeoChannelId) == "Bad":
-                out("IGNORE - Bad Channel %s" % VimeoChannelId, color="red")
+                out(
+                    "IGNORE - Bad Channel %s" % VimeoChannelId,
+                    color="red",
+                    )
                 continue
-            
+
             # Try to get video title
             try:
                 VimeoVideoTitle = re.search(r"<title>(.*?) on Vimeo<\/title>", webpage, re.MULTILINE).group(1)
             except AttributeError:
-                out("PARSING FAILED - Can't get VimeoVideoTitle", color='red')
+                out(
+                    "PARSING FAILED - Can't get VimeoVideoTitle",
+                    color='red',
+                    )
                 continue
 
             StandardCreativeCommonsUrlRegex = re.compile('https\:\/\/creativecommons\.org\/licenses\/(.*?)\/(.*?)\/')
@@ -259,9 +283,7 @@ def checkfiles():
                 matches = StandardCreativeCommonsUrlRegex.finditer(webpage)
                 for m in matches:
                     licensesP1, licensesP2  = (m.group(1)), (m.group(2))
-                
                 VimeoLicense = licensesP1 + "-" + licensesP2
-
                 if licensesP1 not in Allowedlicenses:
                     out(
                         "The file is licensed under %s, but it's not allowed on commons" % VimeoLicense,
