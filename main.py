@@ -245,13 +245,16 @@ def checkfiles():
             
             # Try to get the ChannelID
             try:
-                VimeoChannelId = re.search(r"http(?:s|)\:\/\/vimeo\.com\/(user[0-9]{0,30})\/video", webpage, re.MULTILINE).group(1)
-            except:
-                out(
-                    "PARSING FAILED - Can't get VimeoChannelId",
-                    color='red',
-                    )
-                continue
+                VimeoChannelId = re.search(r"http(?:s|)\:\/\/vimeo\.com\/(user[0-9]{0,30})\/video", webpage).group(1)
+            except AttributeError:
+                try:
+                    VimeoChannelId = re.search(r"https://vimeo\.com/([^:/\"]{0,250}?)/videos\"", webpage).group(1)
+                except AttributeError:
+                    out(
+                        "PARSING FAILED - Can't get VimeoChannelId",
+                        color='red',
+                        )
+                    continue
 
             if check_channel(VimeoChannelId) == "Trusted":pass  #TODO : PASS LR similar as YouTube
 
