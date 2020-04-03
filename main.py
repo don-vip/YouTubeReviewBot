@@ -362,11 +362,22 @@ def checkfiles():
                         oldest_archive_url,
                         ),
                         not_available_old_text)
-                    EditSummary = "Adding [[%s]], was uploaded by %s" % (filename, uploader(filename,link=True))
+                    EditSummary = "Adding [[%s]], was uploaded by %s" % (
+                        filename,
+                        uploader(filename,link=True),
+                        )
                     try:
-                        commit(not_available_old_text, not_available_new_text, not_available_page, EditSummary)
+                        commit(
+                            not_available_old_text,
+                            not_available_new_text,
+                            not_available_page,
+                            EditSummary,
+                            )
                     except pywikibot.LockedPage as error:
-                        out("Page is locked '%s'." % error, color='red')
+                        out(
+                            "Page is locked '%s'." % error,
+                            color='red',
+                            )
                         continue
             else:
                 pass
