@@ -239,7 +239,7 @@ def checkfiles():
             # Try to get video title
             try:
                 VimeoVideoTitle = re.search(r"<title>(.*?) on Vimeo<\/title>", webpage, re.MULTILINE).group(1)
-            except:
+            except AttributeError:
                 out("PARSING FAILED - Can't get VimeoVideoTitle", color='red')
                 continue
 
@@ -272,7 +272,7 @@ def checkfiles():
                     color='red'
                     )
                 continue
-            
+
             TAGS = '{{VimeoReview|id=%s|license=%s|ChannelID=%s|archive=%s|date=%s}}' % (
                 VimeoVideoId,
                 VimeoLicense,
