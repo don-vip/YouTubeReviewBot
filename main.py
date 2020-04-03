@@ -110,7 +110,7 @@ def ChannelChk(ChannelId):
 def commit(old_text, new_text, page, summary):
     """Show diff and submit text to page."""
     yes = {'yes','y', 'ye', ''}
-    quit = {'q','quit','exit'}
+    exit = {'q','quit','exit'}
     question = "Do you want to accept these changes to '%s' with summary '%s' ? [Yy]es / [Nn]o / [Qq]uit \n" % (
         page.title(),
         summary,
@@ -123,7 +123,7 @@ def commit(old_text, new_text, page, summary):
     else:
         choice = input(question).lower()
 
-    if choice in yes:
+    if choice in exit:
         out("\nAbout to make changes at : '%s'" % page.title())
         pywikibot.showDiff(old_text, new_text)
         page.put(new_text, summary=summary, watchArticle=True, minorEdit=False)
@@ -236,7 +236,13 @@ def checkfiles():
                 for m in matches:
                     licensesP1, licensesP2  = (m.group(1)), (m.group(2))
                 if licensesP1 not in Allowedlicenses:
-                    out("The file is licensed under %-%, but it's not allowed on commons" % (licensesP1,licensesP2) , color="red")
+                    out(
+                        "The file is licensed under %-%, but it's not allowed on commons" % (
+                            licensesP1,
+                            licensesP2
+                            ),
+                        color="red",
+                        )
                     continue
                 else:pass
             else:
@@ -245,15 +251,21 @@ def checkfiles():
                     color='red'
                     )
                 continue
-
-            new_text = re.sub(RegexOfLicenseReviewTemplate, "{{VimeoReview|id=%s|license=%s-%s|ChannelID=%s|archive=%s|date=%s}}" % (
+            
+            TAGS = '{{VimeoReview|id=%s|license=%s-%s|ChannelID=%s|archive=%s|date=%s}}' % (
                 VimeoVideoId,
                 licensesP1,
                 licensesP2,
                 VimeoChannelId,
                 archive_url,
-                informatdate()),
-                old_text)
+                informatdate(),
+                )
+
+            new_text = re.sub(
+                RegexOfLicenseReviewTemplate,
+                TAGS,
+                old_text
+                )
 
             EditSummary = "LR Passed, %s , by %s under terms of %-% at https://vimeo.com/%s (Archived - WayBack Machine)" % (
                 VimeoVideoTitle,
@@ -264,21 +276,34 @@ def checkfiles():
                 )
 
             try:
-                commit(old_text, new_text, page, EditSummary)
+                commit(
+                    old_text,
+                    new_text,
+                    page,
+                    EditSummary
+                    )
             except pywikibot.LockedPage as error:
-                out("Page is locked '%s'." % error, color='red')
+                out(
+                    "Page is locked '%s'." % error,
+                    color='red'
+                    )
                 continue
 
         elif DetectSite() == "YouTube":
             try:
-                YouTubeVideoId = re.search(r"{{\s*?[Ff]rom\s[Yy]ou[Tt]ube\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1|=\||)(?:=|)([^\"&?\/ ]{11})",pagetext).group(1)
+                YouTubeVideoId = re.search(
+                    r"{{\s*?[Ff]rom\s[Yy]ou[Tt]ube\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1|=\||)(?:=|)([^\"&?\/ ]{11})", pagetext).group(1)
             except AttributeError:
                 try:
-                    YouTubeVideoId = re.search(r"https?\:\/\/(?:www|m|)(?:|\.)youtube\.com/watch\Wv\=([^\"&?\/ ]{11})",pagetext).group(1)
+                    YouTubeVideoId = re.search(r"https?\:\/\/(?:www|m|)(?:|\.)youtube\.com/watch\Wv\=([^\"&?\/ ]{11})", pagetext).group(1)
                 except:
-                    out("PARSING FAILED - Can't get YouTubeVideoId", color='red')
+                    out(
+                        "PARSING FAILED - Can't get YouTubeVideoId",
+                        color='red'
+                        )
                     continue
             SourceURL = "https://www.youtube.com/watch?v=%s" % YouTubeVideoId
+
             if archived_url(SourceURL) != None:
                 archive_url = archived_url(SourceURL)
             else:
@@ -289,6 +314,7 @@ def checkfiles():
                 continue
             else:
                 webpage = archived_webpage(archive_url)
+
             if ((
                 webpage.find('YouTube account associated with this video has been terminated') or
                 webpage.find('playerErrorMessageRenderer') or
@@ -349,22 +375,28 @@ def checkfiles():
 
             # try to get Channel name
             try:
-                YouTubeChannelName  = re.search(YouTubeChannelNameRegex1,webpage).group(1)
+                YouTubeChannelName  = re.search(YouTubeChannelNameRegex1, webpage).group(1)
             except AttributeError:
                 try:
-                    YouTubeChannelName  = re.search(YouTubeChannelNameRegex2,webpage).group(1)
+                    YouTubeChannelName  = re.search(YouTubeChannelNameRegex2, webpage).group(1)
                 except AttributeError:
-                    out("PARSING FAILED - Can't get YouTubeChannelName", color='red')
+                    out(
+                        "PARSING FAILED - Can't get YouTubeChannelName",
+                        color='red'
+                        )
                     continue
 
             # try to get YouTube Video's Title
             try:
-                YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex1,webpage).group(1)
+                YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex1, webpage).group(1)
             except AttributeError:
                 try:
-                    YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex2,webpage).group(1)
+                    YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex2, webpage).group(1)
                 except AttributeError:
-                    out("PARSING FAILED - Can't get YouTubeVideoTitle", color='red')
+                    out(
+                        "PARSING FAILED - Can't get YouTubeVideoTitle",
+                        color='red'
+                        )
                     continue
 
             # Remove unwanted sysmbols that may fuck-up the wiki-text, if present in Video title or Channel Name
@@ -410,25 +442,46 @@ def checkfiles():
                 )
 
             if re.search(r"Creative Commons", webpage) is not None or ChannelChk(YouTubeChannelId) == "Trusted":
-                new_text = re.sub(RegexOfLicenseReviewTemplate, TAGS, old_text)
+                new_text = re.sub(
+                    RegexOfLicenseReviewTemplate,
+                    TAGS,
+                    old_text
+                    )
             else:
-                out("Video is not Creative Commons 3.0 licensed on YouTube nor from a Trusted Channel", color="red")
+                out(
+                    "Video is not Creative Commons 3.0 licensed on YouTube nor from a Trusted Channel",
+                    color="red"
+                    )
                 continue
             if new_text == old_text:
-                out("IGONRE - New text was equal to Old text.", color="red")
+                out(
+                    "IGONRE - New text was equal to Old text.",
+                    color="red"
+                    )
                 continue
             else:
                 pass
             try:
-                commit(old_text, new_text, page, EditSummary)
+                commit(
+                    old_text,
+                    new_text,
+                    page,
+                    EditSummary
+                    )
             except pywikibot.LockedPage as error:
-                out("Page is locked '%s'." % error, color='red')
+                out(
+                    "Page is locked '%s'." % error,
+                    color='red'
+                    )
                 continue
         else:
             continue
+
+# Global variables defined at the module level
 DRY = None
 AUTO = None
 SITE = None
+LowerCasePageText = None
 
 def main(*args):
     global SITE
