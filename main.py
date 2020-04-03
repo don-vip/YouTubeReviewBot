@@ -551,11 +551,9 @@ def checkfiles():
             continue
 
 def report_run():
-    old_text = (pywikibot.Page(SITE, "User:YouTubeReviewBot/last run time")).get(get_redirect=True, force=True)
-    new_text = re.sub(old_text, str(datetime.utcnow()))
     commit(
-        old_text,
-        new_text,
+        (pywikibot.Page(SITE, "User:YouTubeReviewBot/last run time")).get(get_redirect=True, force=True),
+        str(datetime.utcnow()),
         pywikibot.Page(SITE, "User:YouTubeReviewBot/last run time"),
         "Updating last complete run time"
         )
