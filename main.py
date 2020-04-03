@@ -58,8 +58,8 @@ def archived_url(SourceURL):
         try:
             archive_url = savepagenow.capture(SourceURL)
             status = "Done"
-        except:
-            pass
+        except Exception as e:
+            out(e, color="red")
         if iters > 5:
             status = "Stop"
     return archive_url
@@ -79,7 +79,6 @@ def archived_webpage(archive_url):
             status = "Done"
         except Exception as e:
             out(e, color="red")
-            pass
         if iters > 5:
             status = "Stop"
     return webpage
@@ -261,7 +260,10 @@ def checkfiles():
                 VimeoLicense = licensesP1 + "-" + licensesP2
 
                 if licensesP1 not in Allowedlicenses:
-                    out("The file is licensed under %, but it's not allowed on commons" % VimeoLicense, color="red")
+                    out(
+                        "The file is licensed under %s, but it's not allowed on commons" % VimeoLicense,
+                        color="red",
+                        )
                     continue
                 else:pass
             else:
@@ -313,7 +315,7 @@ def checkfiles():
             except AttributeError:
                 try:
                     YouTubeVideoId = re.search(r"https?\:\/\/(?:www|m|)(?:|\.)youtube\.com/watch\Wv\=([^\"&?\/ ]{11})", pagetext).group(1)
-                except:
+                except AttributeError:
                     out(
                         "PARSING FAILED - Can't get YouTubeVideoId",
                         color='red'
@@ -529,7 +531,7 @@ def main(*args):
                     color="lightred",
                     )
                 sys.exit(0)
-    
+
     checkfiles()
 
 if __name__ == "__main__":
