@@ -256,14 +256,11 @@ def checkfiles():
                 matches = StandardCreativeCommonsUrlRegex.finditer(webpage)
                 for m in matches:
                     licensesP1, licensesP2  = (m.group(1)), (m.group(2))
+                
+                VimeoLicense = licensesP1 + "-" + licensesP2
+
                 if licensesP1 not in Allowedlicenses:
-                    out(
-                        "The file is licensed under %-%, but it's not allowed on commons" % (
-                            licensesP1,
-                            licensesP2
-                            ),
-                        color="red",
-                        )
+                    out("The file is licensed under %, but it's not allowed on commons" % VimeoLicense, color="red")
                     continue
                 else:pass
             else:
@@ -273,10 +270,9 @@ def checkfiles():
                     )
                 continue
             
-            TAGS = '{{VimeoReview|id=%s|license=%s-%s|ChannelID=%s|archive=%s|date=%s}}' % (
+            TAGS = '{{VimeoReview|id=%s|license=%s|ChannelID=%s|archive=%s|date=%s}}' % (
                 VimeoVideoId,
-                licensesP1,
-                licensesP2,
+                VimeoLicense,
                 VimeoChannelId,
                 archive_url,
                 informatdate(),
@@ -288,11 +284,10 @@ def checkfiles():
                 old_text
                 )
 
-            EditSummary = "LR Passed, %s , by %s under terms of %-% at https://vimeo.com/%s (Archived - WayBack Machine)" % (
+            EditSummary = "LR Passed, %s , by %s under terms of % at https://vimeo.com/%s (Archived - WayBack Machine)" % (
                 VimeoVideoTitle,
                 VimeoChannelId,
-                licensesP1,
-                licensesP2,
+                VimeoLicense,,
                 VimeoVideoId,
                 )
 
