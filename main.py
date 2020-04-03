@@ -54,7 +54,7 @@ def archived_url(SourceURL):
     status = "Wait"
     iters = 0
     while status == "Wait":
-        iters = iters + 1
+        iters += 1
         try:
             archive_url = savepagenow.capture(SourceURL)
             status = "Done"
@@ -69,7 +69,7 @@ def archived_webpage(archive_url):
     status = "Wait"
     iters = 0
     while status == "Wait":
-        iters = iters + 1
+        iters += 1
         try:
             req = Request(
                 archive_url,
@@ -155,13 +155,16 @@ def checkfiles():
     gen = pagegenerators.CategorizedPageGenerator(category)
     file_count = 0
     for page in gen:
-        file_count = 1 + file_count
+        file_count += 1
         filename = page.title()
 
         out(
-            "\n%d - %s" % (file_count,filename),
-            color="white",
-            )
+            "\n%d - %s" % (
+                file_count,
+                filename,
+                ),
+                color="white",
+                )
 
         page = pywikibot.Page(
             SITE,
