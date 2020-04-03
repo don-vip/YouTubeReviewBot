@@ -317,7 +317,7 @@ def checkfiles():
                 old_text
                 )
 
-            EditSummary = "LR Passed, %s , by %s under terms of % at https://vimeo.com/%s (Archived - WayBack Machine)" % (
+            EditSummary = "LR Passed, %s , by %s under terms of %s at https://vimeo.com/%s (Archived - WayBack Machine)" % (
                 VimeoVideoTitle,
                 VimeoChannelId,
                 VimeoLicense,
