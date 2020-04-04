@@ -329,6 +329,7 @@ def checkfiles():
                     "Creative commons Not found - File is not licensed under any type of creative commons license including CC-NC/ND",
                     color='red'
                     )
+                dump_file(filename)
                 continue
 
             TAGS = '{{VimeoReview|id=%s|license=%s|ChannelID=%s|archive=%s|date=%s}}' % (
@@ -540,6 +541,7 @@ def checkfiles():
                     "Video is not Creative Commons 3.0 licensed on YouTube nor from a Trusted Channel",
                     color="red"
                     )
+                dump_file(filename)
                 continue
             if new_text == old_text:
                 out(
