@@ -19,6 +19,21 @@ def uploader(filename, link=True):
     else:
         return username
 
+def dump_file(filename):
+    """Dump files if review not possible for multiple times"""
+    dump1_pagetext = pywikibot.Page(SITE,"User:YouTubeReviewBot/dump1",).get(get_redirect=True)
+    dump2_pagetext = pywikibot.Page(SITE,"User:YouTubeReviewBot/dump2",).get(get_redirect=True)
+    dump3_pagetext = pywikibot.Page(SITE,"User:YouTubeReviewBot/dump3",).get(get_redirect=True)
+    if filename in dump3_pagetext:
+        return True
+    elif filename in dump2_pagetext:
+        commit(dump3_pagetext,(dump3_pagetext + "\n[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump3",),"dumped one file",)
+    elif filename in dump1_pagetext:
+        commit(dump2_pagetext,(dump2_pagetext + "\n[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump2",),"dumped one file",)
+    else:
+        commit(dump1_pagetext,(dump1_pagetext + "\n[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump1",),"dumped one file",)
+    return False
+
 def upload_date(filename):
     """upload date of the file."""
     for info in (pywikibot.Page(SITE, filename)).revisions(reverse=True, total=1):
