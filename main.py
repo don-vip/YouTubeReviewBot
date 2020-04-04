@@ -20,7 +20,7 @@ def uploader(filename, link=True):
         return username
 
 def dump_file(filename):
-    """Dump files if review not possible for multiple times"""
+    """Dump files if review not possible for multiple times."""
     dump1_pagetext = pywikibot.Page(SITE,"User:YouTubeReviewBot/dump1",).get(get_redirect=True)
     dump2_pagetext = pywikibot.Page(SITE,"User:YouTubeReviewBot/dump2",).get(get_redirect=True)
     dump3_pagetext = pywikibot.Page(SITE,"User:YouTubeReviewBot/dump3",).get(get_redirect=True)
