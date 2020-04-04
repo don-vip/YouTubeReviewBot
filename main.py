@@ -27,11 +27,11 @@ def dump_file(filename):
     if filename in dump3_pagetext:
         return True
     elif filename in dump2_pagetext:
-        commit(dump3_pagetext,(dump3_pagetext + "\n#[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump3",),"dumped one file",)
+        commit(dump3_pagetext,(dump3_pagetext + "\n#[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump3",),"dumped [[%s]]" % filename ,)
     elif filename in dump1_pagetext:
-        commit(dump2_pagetext,(dump2_pagetext + "\n#[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump2",),"dumped one file",)
+        commit(dump2_pagetext,(dump2_pagetext + "\n#[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump2",),"dumped [[%s]]" % filename ,)
     else:
-        commit(dump1_pagetext,(dump1_pagetext + "\n#[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump1",),"dumped one file",)
+        commit(dump1_pagetext,(dump1_pagetext + "\n#[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump1",),"dumped [[%s]]" % filename ,)
     return False
 
 def upload_date(filename):
