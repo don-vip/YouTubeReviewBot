@@ -270,7 +270,7 @@ def checkfiles():
                 continue
             else:
                 webpage = archived_webpage(archive_url)
-            
+
             # Try to get the ChannelID
             try:
                 VimeoChannelId = re.search(r"http(?:s|)\:\/\/vimeo\.com\/(user[0-9]{0,30})\/video", webpage).group(1)
