@@ -24,15 +24,12 @@ def dump_file(filename):
     dump1_pagetext = pywikibot.Page(SITE,"User:YouTubeReviewBot/dump1",).get(get_redirect=True)
     dump2_pagetext = pywikibot.Page(SITE,"User:YouTubeReviewBot/dump2",).get(get_redirect=True)
     dump3_pagetext = pywikibot.Page(SITE,"User:YouTubeReviewBot/dump3",).get(get_redirect=True)
-    if filename in dump3_pagetext:
-        return True
-    elif filename in dump2_pagetext:
+    if filename in dump2_pagetext:
         commit(dump3_pagetext,(dump3_pagetext + "\n#[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump3",),"dumped [[%s]]" % filename ,)
     elif filename in dump1_pagetext:
         commit(dump2_pagetext,(dump2_pagetext + "\n#[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump2",),"dumped [[%s]]" % filename ,)
     else:
         commit(dump1_pagetext,(dump1_pagetext + "\n#[[:" + filename + "]]"),pywikibot.Page(SITE,"User:YouTubeReviewBot/dump1",),"dumped [[%s]]" % filename ,)
-    return False
 
 def upload_date(filename):
     """Upload date of the file."""
@@ -205,6 +202,13 @@ def checkfiles():
         if IsMarkedForDeletion(pagetext) == True:
             out(
                 "IGNORE - File is marked for deletion",
+                color='red',
+                )
+            continue
+
+        elif filename in pywikibot.Page(SITE,"User:YouTubeReviewBot/dump3",).get(get_redirect=True):
+            out(
+                "IGNORE - File dumped for 3rd time.",
                 color='red',
                 )
             continue
