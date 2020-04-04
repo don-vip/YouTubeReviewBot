@@ -35,7 +35,7 @@ def dump_file(filename):
     return False
 
 def upload_date(filename):
-    """upload date of the file."""
+    """Upload date of the file."""
     for info in (pywikibot.Page(SITE, filename)).revisions(reverse=True, total=1):
         return datetime.strptime(str(info.timestamp), "%Y-%m-%dT%H:%M:%SZ")
 
