@@ -57,6 +57,8 @@ def DetectSite():
         return "Vimeo"
     if (LowerCasePageText.find('{{from youtube') != -1):
         return "YouTube"
+    elif (LowerCasePageText.find('videowiki.wmflabs.org') != -1):
+        return "VideoWiki"
     elif (LowerCasePageText.find('flickr.com/photos') != -1):
         return "Flickr"
     elif (LowerCasePageText.find('vimeo.com') != -1):
@@ -213,12 +215,20 @@ def checkfiles():
                 )
             continue
 
-        elif (datetime.utcnow()-upload_date(filename)).days > 61:
-            out(
-                "File is older than 2 months, will not process it.",
-                color='red',
+        elif DetectSite() == "VideoWiki":
+            new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
+            EditSummary = "@%s Removing licenseReview Template, not required for video-wiki files beacuse all constituent files are from commons." % uploader(
+                filename,
+                link=True,
                 )
-            continue
+            try:
+                commit(old_text, new_text, page, EditSummary)
+            except pywikibot.LockedPage as error:
+                out(
+                    "Page is locked '%s'." % error,
+                    color='red',
+                    )
+                continue
 
         elif OwnWork():
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
@@ -228,6 +238,13 @@ def checkfiles():
             except pywikibot.LockedPage as error:
                 out("Page is locked '%s'." % error, color='red')
                 continue
+
+        elif (datetime.utcnow()-upload_date(filename)).days > 61:
+            out(
+                "File is older than 2 months, will not process it.",
+                color='red',
+                )
+            continue
 
         elif DetectSite() == "Flickr":
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{FlickrReview}}" , old_text)
