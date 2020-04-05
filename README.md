@@ -4,5 +4,6 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://github.com/eatcha-wikimedia/YouTubeReviewBot/graphs/commit-activity)
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/eatcha-wikimedia/YouTubeReviewBot/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/eatcha-wikimedia/YouTubeReviewBot.svg?branch=master)](https://travis-ci.org/eatcha-wikimedia/YouTubeReviewBot)
 
 <https://commons.wikimedia.org/wiki/User:YouTubeReviewBot>
