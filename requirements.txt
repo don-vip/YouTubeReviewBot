@@ -1,3 +1,2 @@
-pywikibot.egg==info
 pywikibot==3.0.20200326
 savepagenow==0.0.13
