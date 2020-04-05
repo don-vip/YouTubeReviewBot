@@ -5,5 +5,6 @@
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/eatcha-wikimedia/YouTubeReviewBot/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/eatcha-wikimedia/YouTubeReviewBot.svg?branch=master)](https://travis-ci.org/eatcha-wikimedia/YouTubeReviewBot)
+[![Known Vulnerabilities](https://snyk.io/test/github/eatcha-wikimedia/YouTubeReviewBot/badge.svg?targetFile=requirements.txt)](https://snyk.io/test/github/eatcha-wikimedia/YouTubeReviewBot?targetFile=requirements.txt)
 
 <https://commons.wikimedia.org/wiki/User:YouTubeReviewBot>
