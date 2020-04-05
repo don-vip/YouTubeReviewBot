@@ -74,7 +74,7 @@ def archived_url(SourceURL):
     while status == "Wait":
         iters += 1
         try:
-            archive_url = savepagenow.capture(SourceURL)
+            archive_url = savepagenow.capture(SourceURL, user_agent="User:YouTubeReviewBot on wikimedia commons")
             status = "Done"
         except Exception as e:
             out(e, color="red")
