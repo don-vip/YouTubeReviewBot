@@ -600,9 +600,11 @@ def main(*args):
             continue
     args = pywikibot.handle_args(*args)
     SITE = pywikibot.Site()
-
-    if not SITE.logged_in():
-        SITE.login()
+    if DRY != True:
+        if not SITE.logged_in():
+            SITE.login()
+        else:pass
+    else:pass
     # Abort on unknown arguments
     for arg in args:
         if arg not in [
