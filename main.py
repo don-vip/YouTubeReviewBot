@@ -444,7 +444,7 @@ def checkfiles():
                 ) != -1):
                     dump_file(filename)
                     out(
-                        "Video is not Creative Commons 3.0 licensed on YouTube nor from a Trusted Channel",
+                        "DUMP - Video source URL is dead",
                         color="red",
                         )
             else:
