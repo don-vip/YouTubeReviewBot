@@ -7,4 +7,4 @@ cache: pip
 install:
   - pip install -r requirements.txt
 script:
-  - python main.py -dry
+  - python main.py -dry -pt:0
