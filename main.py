@@ -77,7 +77,10 @@ def archived_url(SourceURL):
             archive_url = savepagenow.capture(SourceURL, user_agent="User:YouTubeReviewBot on wikimedia commons")
             status = "Done"
         except Exception as e:
-            out(e, color="red")
+            out(
+                e,
+                color="red",
+                )
         if iters > 5:
             status = "Stop"
     return archive_url
@@ -97,7 +100,10 @@ def archived_webpage(archive_url):
             webpage = urlopen(req).read().decode('utf-8') #nosec
             status = "Done"
         except Exception as e:
-            out(e, color="red")
+            out(
+                e,
+                color="red",
+                )
         if iters > 5:
             status = "Stop"
     return webpage
@@ -168,7 +174,10 @@ def out(text, newline=True, date=False, color=None):
         if date
         else ""
     )
-    pywikibot.stdout("%s%s" % (dstr, text), newline=newline)
+    pywikibot.stdout(
+        "%s%s" % (dstr, text),
+        newline=newline,
+        )
 
 def checkfiles():
     category = pywikibot.Category(SITE,'License_review_needed_(video)')
@@ -236,7 +245,10 @@ def checkfiles():
             try:
                 commit(old_text, new_text, page, EditSummary)
             except pywikibot.LockedPage as error:
-                out("Page is locked '%s'." % error, color='red')
+                out(
+                    "Page is locked '%s'." % error,
+                    color='red',
+                    )
                 continue
 
         elif (datetime.utcnow()-upload_date(filename)).days > 61:
@@ -270,7 +282,10 @@ def checkfiles():
                 try:
                     VimeoVideoId = re.search(r"vimeo\.com\/((?:[0-9_]+))",pagetext).group(1)
                 except:
-                    out("PARSING FAILED - Can't get VimeoVideoId", color='red')
+                    out(
+                        "PARSING FAILED - Can't get VimeoVideoId",
+                        color='red',
+                        )
                     continue
             SourceURL = "https://vimeo.com/%s" % VimeoVideoId
 
@@ -406,10 +421,16 @@ def checkfiles():
             if archived_url(SourceURL) != None:
                 archive_url = archived_url(SourceURL)
             else:
-                out("WAYBACK FAILED - Can't get archive_url", color='red')
+                out(
+                    "WAYBACK FAILED - Can't get archive_url",
+                    color='red',
+                    )
                 continue
             if archived_webpage(archive_url) == None:
-                out("WAYBACK FAILED - Can't get webpage", color='red')
+                out(
+                    "WAYBACK FAILED - Can't get webpage",
+                    color='red',
+                    )
                 continue
             else:
                 webpage = archived_webpage(archive_url)
@@ -421,46 +442,14 @@ def checkfiles():
                 webpage.find('If the owner of this video has granted you access') or
                 (webpage.find('player-unavailable') and webpage.find('Sorry about that'))
                 ) != -1):
-                    not_available_page = pywikibot.Page(
-                        SITE,
-                        ("User:YouTubeReviewBot/Video not available on YouTube and marked for license review/%s" % (datetime.utcnow()).strftime('%B %Y')),
+                    dump_file(filename)
+                    out(
+                        "Video is not Creative Commons 3.0 licensed on YouTube nor from a Trusted Channel",
+                        color="red",
                         )
-
-                    try:
-                        not_available_old_text = not_available_page.get(get_redirect=True, force=True)
-                    except pywikibot.NoPage:
-                        not_available_old_text = "<gallery>\n</gallery>"
-
-                    if (not_available_old_text.find(filename) != -1):
-                        continue
-                    else:pass
-                    oldest_archive_url = "" # TODO : f(x) for oldest archive
-                    not_available_new_text = re.sub("</gallery>", "%s|Uploader Name : %s <br> video url : %s <br> oldest archive : %s \n</gallery>" % (
-                        filename,
-                        uploader(filename,link=True),
-                        SourceURL,
-                        oldest_archive_url,
-                        ),
-                        not_available_old_text)
-                    EditSummary = "Adding [[%s]], was uploaded by %s" % (
-                        filename,
-                        uploader(filename,link=True),
-                        )
-                    try:
-                        commit(
-                            not_available_old_text,
-                            not_available_new_text,
-                            not_available_page,
-                            EditSummary,
-                            )
-                    except pywikibot.LockedPage as error:
-                        out(
-                            "Page is locked '%s'." % error,
-                            color='red',
-                            )
-                        continue
             else:
                 pass
+
             YouTubeChannelIdRegex1 = r"data-channel-external-id=\"(.{0,30})\""
             YouTubeChannelIdRegex2 = r"[\"']externalChannelId[\"']:[\"']([a-zA-Z0-9_-]{0,25})[\"']"
             YouTubeChannelNameRegex1 = r"\\\",\\\"author\\\":\\\"(.{1,50})\\\",\\\""
@@ -476,11 +465,17 @@ def checkfiles():
                 try:
                     YouTubeChannelId = re.search(YouTubeChannelIdRegex2,webpage).group(1)
                 except AttributeError:
-                    out("PARSING FAILED - Can't get YouTubeChannelId", color='red')
+                    out(
+                        "PARSING FAILED - Can't get YouTubeChannelId",
+                        color='red',
+                        )
                     continue
 
             if check_channel(YouTubeChannelId) == "Bad":
-                out("IGONRE - Bad Channel %s" % YouTubeChannelId , color="red")
+                out(
+                    "IGONRE - Bad Channel %s" % YouTubeChannelId,
+                    color="red",
+                    )
                 continue
 
             # try to get Channel name
