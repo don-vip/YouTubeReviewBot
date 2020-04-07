@@ -457,7 +457,7 @@ def checkfiles():
                 'If the owner of this video has granted you access',
                 'player-unavailable',
                 ]
-    
+
             for line in find_deleted:
                 if line in webpage:
                     dump_file(filename)
