@@ -450,20 +450,23 @@ def checkfiles():
             else:
                 webpage = archived_webpage(archive_url)
 
-            if ((
-                webpage.find('YouTube account associated with this video has been terminated') or
-                webpage.find('playerErrorMessageRenderer') or
-                webpage.find('Video unavailable') or
-                webpage.find('If the owner of this video has granted you access') or
-                (webpage.find('player-unavailable') and webpage.find('Sorry about that'))
-                ) != -1):
+            find_deleted = [
+                'YouTube account associated with this video has been terminated',
+                'playerErrorMessageRenderer',
+                'Video unavailable',
+                'If the owner of this video has granted you access',
+                'player-unavailable',
+                ]
+    
+            for line in find_deleted:
+                if line in webpage:
                     dump_file(filename)
                     out(
                         "DUMP - Video source URL is dead",
                         color="red",
                         )
-            else:
-                pass
+                else:
+                    pass
 
             YouTubeChannelIdRegex1 = r"data-channel-external-id=\"(.{0,30})\""
             YouTubeChannelIdRegex2 = r"[\"']externalChannelId[\"']:[\"']([a-zA-Z0-9_-]{0,25})[\"']"
