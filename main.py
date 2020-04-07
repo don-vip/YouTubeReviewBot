@@ -151,7 +151,7 @@ def commit(old_text, new_text, page, summary):
             old_text,
             new_text,
             )
-    
+
         page.put(
             new_text,
             summary=summary,
@@ -281,7 +281,7 @@ def checkfiles():
             except AttributeError:
                 try:
                     VimeoVideoId = re.search(r"vimeo\.com\/((?:[0-9_]+))",pagetext).group(1)
-                except:
+                except AttributeError:
                     out(
                         "PARSING FAILED - Can't get VimeoVideoId",
                         color='red',
