@@ -66,7 +66,7 @@ def DetectSite():
         return "YouTube"
 
 def archived_url(SourceURL):
-    """Get a realtime archived url of the source url."""
+    """Get a real-time archived url of the source url."""
     archive_url = None
     status = "Wait"
     iters = 0
@@ -114,6 +114,18 @@ def check_channel(ChannelId):
     elif ChannelId in (pywikibot.Page(SITE, "User:YouTubeReviewBot/bad-authors")).get(get_redirect=True, force=True):
         return "Bad"
     return "Normal"
+
+def display_video_info(VideoId,ChannelId,VideoTitle,ArchiveUrl,ChannelName="Not Applicable"):
+    out(
+        str(
+            "video Id : " + VideoId +
+            "\nChannel Name : " + ChannelName +
+            "\nChannel Id : " + ChannelId +
+            "\nVideo Title : " + VideoTitle +
+            "\nArchive : " + ArchiveUrl +
+            "\nDate : " + informatdate()),
+            color="white",
+            )
 
 def OwnWork():
     """Check if own work by uploader."""
@@ -177,9 +189,14 @@ def out(text, newline=True, date=False, color=None):
         )
 
 def checkfiles():
-    category = pywikibot.Category(SITE,'License_review_needed_(video)')
+    category = pywikibot.Category(
+        SITE,
+        'License_review_needed_(video)',
+        )
     RegexOfLicenseReviewTemplate = r"{{(?:|\s*)[LlVvYy][IiOo][CcMmUu][EeTt][NnUuOo](?:[SsBbCc][Ee]|)(?:|\s*)[Rr][Ee][Vv][Ii][Ee][Ww](?:|\s*)(?:\|.*|)}}"
-    gen = pagegenerators.CategorizedPageGenerator(category)
+    gen = pagegenerators.CategorizedPageGenerator(
+        category,
+        )
     file_count = 0
     for page in gen:
         file_count += 1
@@ -198,8 +215,7 @@ def checkfiles():
             filename,
             )
 
-        pagetext = page.get(get_redirect=True)
-        old_text = pagetext
+        old_text = pagetext = page.get()
         global LowerCasePageText
         LowerCasePageText = pagetext.lower()
         out(
@@ -317,9 +333,7 @@ def checkfiles():
                         )
                     continue
 
-            if check_channel(VimeoChannelId) == "Trusted":
-                pass  #TODO : PASS LR similar as YouTube
-
+            # If bad Channel do not review it, we do not support trusted Channel for vimeo yet.
             if check_channel(VimeoChannelId) == "Bad":
                 out(
                     "IGNORE - Bad Channel %s" % VimeoChannelId,
@@ -337,20 +351,18 @@ def checkfiles():
                     )
                 continue
 
-            StandardCreativeCommonsUrlRegex = re.compile('https\:\/\/creativecommons\.org\/licenses\/(.*?)\/(.*?)\/')
-
-            Allowedlicenses = [
-                'by-sa',
-                'by',
-                'publicdomain',
-                'cc0'
-                ]
-
             if re.search(r"creativecommons.org", webpage):
+                StandardCreativeCommonsUrlRegex = re.compile('https\:\/\/creativecommons\.org\/licenses\/(.*?)\/(.*?)\/')
                 matches = StandardCreativeCommonsUrlRegex.finditer(webpage)
                 for m in matches:
                     licensesP1, licensesP2  = (m.group(1)), (m.group(2))
                 VimeoLicense = licensesP1 + "-" + licensesP2
+                Allowedlicenses = [
+                    'by-sa',
+                    'by',
+                    'publicdomain',
+                    'cc0',
+                    ]
                 if licensesP1 not in Allowedlicenses:
                     out(
                         "The file is licensed under %s, but it's not allowed on commons" % VimeoLicense,
@@ -366,13 +378,17 @@ def checkfiles():
                 dump_file(filename)
                 continue
 
-            TAGS = '{{VimeoReview|id=%s|license=%s|ChannelID=%s|archive=%s|date=%s}}' % (
+            TAGS = '{{VimeoReview|id=%s|title=%s|license=%s|ChannelID=%s|archive=%s|date=%s}}' % (
                 VimeoVideoId,
+                VimeoVideoTitle,
                 VimeoLicense,
                 VimeoChannelId,
                 archive_url,
                 informatdate(),
                 )
+
+            #Out puts some basic info about the video.
+            display_video_info(VimeoVideoId,VimeoChannelId,VimeoVideoTitle,archive_url)
 
             new_text = re.sub(
                 RegexOfLicenseReviewTemplate,
@@ -517,16 +533,8 @@ def checkfiles():
                 "}}"
                 )
 
-            out(
-                str(
-                "video Id : " + YouTubeVideoId +
-                "\nChannel Name : " + YouTubeChannelName +
-                "\nChannel Id : " + YouTubeChannelId +
-                "\nVideo Title : " + YouTubeVideoTitle +
-                "\nArchive : " + archive_url +
-                "\nDate : " + informatdate()),
-                color="white",
-                )
+            #Out puts some basic info about the video.
+            display_video_info(YouTubeVideoId,YouTubeChannelId,YouTubeVideoTitle,archive_url,ChannelName=YouTubeChannelName)
 
             if check_channel(YouTubeChannelId) == "Trusted":
                 TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
@@ -610,11 +618,13 @@ def main(*args):
             continue
     args = pywikibot.handle_args(*args)
     SITE = pywikibot.Site()
+
     if DRY is not True:
         if not SITE.logged_in():
             SITE.login()
         else:pass
     else:pass
+
     # Abort on unknown arguments
     for arg in args:
         if arg not in [
