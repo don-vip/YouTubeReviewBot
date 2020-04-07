@@ -16,8 +16,7 @@ def uploader(filename, link=True):
         return "Unknown"
     if link:
         return "[[User:%s|%s]]" % (username, username)
-    else:
-        return username
+    return username
 
 def dump_file(filename):
     """Dump files if review not possible for multiple times."""
@@ -55,7 +54,7 @@ def DetectSite():
     """Identify the source website of the file."""
     if (LowerCasePageText.find('{{from vimeo') != -1):
         return "Vimeo"
-    if (LowerCasePageText.find('{{from youtube') != -1):
+    elif (LowerCasePageText.find('{{from youtube') != -1):
         return "YouTube"
     elif (LowerCasePageText.find('videowiki.wmflabs.org') != -1):
         return "VideoWiki"
@@ -114,8 +113,7 @@ def check_channel(ChannelId):
         return "Trusted"
     elif ChannelId in (pywikibot.Page(SITE, "User:YouTubeReviewBot/bad-authors")).get(get_redirect=True, force=True):
         return "Bad"
-    else:
-        return "Normal"
+    return "Normal"
 
 def OwnWork():
     """Check if own work by uploader."""
@@ -123,8 +121,7 @@ def OwnWork():
         return True
     elif (LowerCasePageText.find('own work') != -1):
         return True
-    else:
-        return False
+    return False
 
 def commit(old_text, new_text, page, summary):
     """Show diff and submit text to the wiki server."""
@@ -210,7 +207,7 @@ def checkfiles():
             color="yellow",
             )
 
-        if IsMarkedForDeletion(pagetext) == True:
+        if IsMarkedForDeletion(pagetext) is True:
             out(
                 "IGNORE - File is marked for deletion",
                 color='red',
@@ -289,7 +286,7 @@ def checkfiles():
                     continue
             SourceURL = "https://vimeo.com/%s" % VimeoVideoId
 
-            if archived_url(SourceURL) != None:
+            if archived_url(SourceURL) is not None:
                 archive_url = archived_url(SourceURL)
             else:
                 out(
@@ -298,7 +295,7 @@ def checkfiles():
                     )
                 continue
 
-            if archived_webpage(archive_url) == None:
+            if archived_webpage(archive_url) is None:
                 out(
                     "WAYBACK FAILED - Can't get webpage",
                     color='red',
@@ -320,7 +317,8 @@ def checkfiles():
                         )
                     continue
 
-            if check_channel(VimeoChannelId) == "Trusted":pass  #TODO : PASS LR similar as YouTube
+            if check_channel(VimeoChannelId) == "Trusted":
+                pass  #TODO : PASS LR similar as YouTube
 
             if check_channel(VimeoChannelId) == "Bad":
                 out(
@@ -426,7 +424,7 @@ def checkfiles():
                     color='red',
                     )
                 continue
-            if archived_webpage(archive_url) == None:
+            if archived_webpage(archive_url) is None:
                 out(
                     "WAYBACK FAILED - Can't get webpage",
                     color='red',
@@ -612,7 +610,7 @@ def main(*args):
             continue
     args = pywikibot.handle_args(*args)
     SITE = pywikibot.Site()
-    if DRY != True:
+    if DRY is not True:
         if not SITE.logged_in():
             SITE.login()
         else:pass
