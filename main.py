@@ -51,20 +51,13 @@ def AutoFill(site,webpage,text,source,author,VideoTitle):
     elif site == "Vimeo": #Not Implemented yet
         uploaddate = ""
         description = ""
-
     #remove scheme from urls
     description = re.sub('https?://', '', description)
-
     if not re.search(r"\|description=(.*)",text).group(1):
         text = text.replace("|description=","|description=%s" % description ,1)
-
-    if not re.search(r"\|date=(.*)",text).group(1):
-        text = text.replace("|date=","|date=%s" % uploaddate ,1)
-
-    text = text.replace("|source=","|source=%s" % source ,1)
-
-    if not re.search(r"\|author=(.*)",text).group(1):
-        text = text.replace("|author=","|author=%s" % author ,1)
+    text = re.sub("\|date=.*", "|date=%s" % uploaddate, text, max=1)
+    text = re.sub("\|source=.*", "|source=%s" % source, text, max=1)
+    text = re.sub("\|author=.*", "|author=%s" % author, text, max=1)
     return text
 
 def IsMarkedForDeletion(pagetext):
@@ -548,7 +541,7 @@ def checkfiles():
                 try:
                     YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex2, webpage).group(1)
                 except AttributeError:
-                    YouTubeVideoTitle = filename
+                    YouTubeVideoTitle = filename.replace('File:', '', 1).replace('.webm', '', 1).replace('.ogv', '', 1)
                     out(
                         "PARSING FAILED - Can't get YouTubeVideoTitle setting filename as title",
                         color='yellow',
