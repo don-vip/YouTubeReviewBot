@@ -548,9 +548,10 @@ def checkfiles():
                 try:
                     YouTubeVideoTitle   = re.search(YouTubeVideoTitleRegex2, webpage).group(1)
                 except AttributeError:
+                    YouTubeVideoTitle = filename
                     out(
-                        "PARSING FAILED - Can't get YouTubeVideoTitle",
-                        color='red'
+                        "PARSING FAILED - Can't get YouTubeVideoTitle setting filename as title",
+                        color='yellow'
                         )
                     continue
 
