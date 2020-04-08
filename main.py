@@ -55,9 +55,9 @@ def AutoFill(site,webpage,text,source,author,VideoTitle):
     description = re.sub('https?://', '', description)
     if not re.search(r"\|description=(.*)",text).group(1):
         text = text.replace("|description=","|description=%s" % description ,1)
-    text = re.sub("\|date=.*", "|date=%s" % uploaddate, text, max=1)
-    text = re.sub("\|source=.*", "|source=%s" % source, text, max=1)
-    text = re.sub("\|author=.*", "|author=%s" % author, text, max=1)
+    text = re.sub("\|date=.*", "|date=%s" % uploaddate, text)
+    text = re.sub("\|source=.*", "|source=%s" % source, text)
+    text = re.sub("\|author=.*", "|author=%s" % author, text)
     return text
 
 def IsMarkedForDeletion(pagetext):
