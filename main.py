@@ -40,11 +40,12 @@ def informatdate():
     return (datetime.utcnow()).strftime('%Y-%m-%d')
 
 def AutoFill(site,webpage,text,source,author,permission):
-    if site is "YouTube":
+    """Auto fills empty information template parameters."""
+    if site == "YouTube":
         date = re.search(r"<strong class=\"watch-time-text\">Published on ([A-Za-z]*?) ([0-9]{1,2}), ([0-9]{2,4})</strong>", webpage)
         uploaddate = datetime.strptime(("%s %s %s" % (date.group(2), date.group(1), date.group(3))), "%d %b %Y").date()
         description = re.search(r"<meta name=\"description\" content=\"(.*)\">", webpage).group(1)
-    elif site is "Vimeo": #Not Implemented yet
+    elif site == "Vimeo": #Not Implemented yet
         uploaddate = ""
         description = ""
     if not re.search(r"\|description=(.*)",text).group(1):
