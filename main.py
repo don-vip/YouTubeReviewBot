@@ -484,6 +484,7 @@ def checkfiles():
                 'Video unavailable',
                 'If the owner of this video has granted you access',
                 'This video has been removed by the uploader',
+                'Sign in to confirm your age',
                 ]
 
             for line in find_deleted:
