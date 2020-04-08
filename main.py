@@ -502,7 +502,6 @@ def checkfiles():
             YouTubeChannelNameRegex3 = r"Unsubscribe from ([^<{]*?)\?"
             YouTubeVideoTitleRegex1 = r"<title>(?:\s*|)(.{1,250})(?:\s*|)- YouTube(?:\s*|)</title>"
             YouTubeVideoTitleRegex2 = r"\"title\":\"(.{1,160})\",\"length"
-            
 
             # try to get channel Id
             try:
