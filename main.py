@@ -39,6 +39,27 @@ def informatdate():
     """Current date in yyyy-mm-dd format."""
     return (datetime.utcnow()).strftime('%Y-%m-%d')
 
+def AutoFill(site,webpage,text,source,author,permission):
+    """Auto fills empty information template parameters."""
+    if site == "YouTube":
+        date = re.search(r"<strong class=\"watch-time-text\">Published on ([A-Za-z]*?) ([0-9]{1,2}), ([0-9]{2,4})</strong>", webpage)
+        uploaddate = datetime.strptime(("%s %s %s" % (date.group(2), date.group(1), date.group(3))), "%d %b %Y").date()
+        description = re.search(r"<meta name=\"description\" content=\"(.*)\">", webpage).group(1)
+    elif site == "Vimeo": #Not Implemented yet
+        uploaddate = ""
+        description = ""
+    if not re.search(r"\|description=(.*)",text).group(1):
+        text = text.replace("|description=","|description=%s" % description ,1)
+    if not re.search(r"\|date=(.*)",text).group(1):
+        text = text.replace("|date=","|date=%s" % uploaddate ,1)
+    if not re.search(r"\|source=(.*)",text).group(1):
+        text = text.replace("|source=","|source=%s" % source ,1)
+    if not re.search(r"\|author=(.*)",text).group(1):
+        text = text.replace("|author=","|author=%s" % author ,1)
+    if not re.search(r"\|permission=(.*)",text).group(1):
+        text = text.replace("|permission=","|permission=%s" % permission ,1)
+    return text
+
 def IsMarkedForDeletion(pagetext):
     """Determine if the file is marked for deletion."""
     LowerCasePageText = pagetext.lower()
@@ -557,6 +578,18 @@ def checkfiles():
                 YouTubeLicense,
                 YouTubeVideoId,
                 )
+
+            try:
+                old_text = AutoFill(
+                    "YouTube",
+                    webpage,
+                    old_text,
+                    ("{{From YouTube|1=%s|2=%s}}" % (YouTubeChannelId,YouTubeVideoTitle)),
+                    ("[https://www.youtube.com/channel/%s %s]" % (YouTubeChannelId, YouTubeChannelName)),
+                    "From YouTube source url",
+                    )
+            except Exception as e:
+                out(e,color="red")
 
             if re.search(r"Creative Commons", webpage) is not None or check_channel(YouTubeChannelId) == "Trusted":
                 new_text = re.sub(
