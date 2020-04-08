@@ -39,7 +39,7 @@ def informatdate():
     """Current date in yyyy-mm-dd format."""
     return (datetime.utcnow()).strftime('%Y-%m-%d')
 
-def AutoFill(site,webpage,text,source,author):
+def AutoFill(site,webpage,text,source,author,VideoTitle):
     """Auto fills empty information template parameters."""
     if site == "YouTube":
         date = re.search(r"<strong class=\"watch-time-text\">Published on ([A-Za-z]*?) ([0-9]{1,2}), ([0-9]{2,4})</strong>", webpage)
@@ -47,7 +47,7 @@ def AutoFill(site,webpage,text,source,author):
         try:
             description = re.search(r"<meta name=\"description\" content=\"(.*)\">", webpage).group(1)
         except AttributeError:
-            description = "{{subst:PAGENAME}}" # maybe remove the extension?
+            description = VideoTitle
     elif site == "Vimeo": #Not Implemented yet
         uploaddate = ""
         description = ""
@@ -593,6 +593,7 @@ def checkfiles():
                     old_text,
                     ("{{From YouTube|1=%s|2=%s}}" % (YouTubeChannelId,YouTubeVideoTitle)),
                     ("[https://www.youtube.com/channel/%s %s]" % (YouTubeChannelId, YouTubeChannelName)),
+                    YouTubeVideoTitle,
                     )
             except Exception as e:
                 out(e,color="red")
