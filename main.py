@@ -47,7 +47,7 @@ def AutoFill(site,webpage,text,source,author,permission):
         try:
             description = re.search(r"<meta name=\"description\" content=\"(.*)\">", webpage).group(1)
         except AttributeError:
-            description = "{{subst:PAGENAME}}" # maybe remove the extension? 
+            description = "{{subst:PAGENAME}}" # maybe remove the extension?
     elif site == "Vimeo": #Not Implemented yet
         uploaddate = ""
         description = ""
