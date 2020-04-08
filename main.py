@@ -551,9 +551,8 @@ def checkfiles():
                     YouTubeVideoTitle = filename
                     out(
                         "PARSING FAILED - Can't get YouTubeVideoTitle setting filename as title",
-                        color='yellow'
+                        color='yellow',
                         )
-                    continue
 
             # Remove unwanted sysmbols that may fuck-up the wiki-text, if present in Video title or Channel Name
             YouTubeChannelName = re.sub(r'[{}\|\+\]\[]', r'-', YouTubeChannelName)
