@@ -44,7 +44,10 @@ def AutoFill(site,webpage,text,source,author,permission):
     if site == "YouTube":
         date = re.search(r"<strong class=\"watch-time-text\">Published on ([A-Za-z]*?) ([0-9]{1,2}), ([0-9]{2,4})</strong>", webpage)
         uploaddate = datetime.strptime(("%s %s %s" % (date.group(2), date.group(1), date.group(3))), "%d %b %Y").date()
-        description = re.search(r"<meta name=\"description\" content=\"(.*)\">", webpage).group(1)
+        try:
+            description = re.search(r"<meta name=\"description\" content=\"(.*)\">", webpage).group(1)
+        except AttributeError:
+            description = "{{subst:PAGENAME}}" # maybe remove the extension? 
     elif site == "Vimeo": #Not Implemented yet
         uploaddate = ""
         description = ""
