@@ -586,7 +586,7 @@ def checkfiles():
                     "YouTube",
                     webpage,
                     old_text,
-                    ("{{From YouTube|1=%s|2=%s}}" % (YouTubeChannelId,YouTubeVideoTitle)),
+                    ("{{From YouTube|1=%s|2=%s}}" % (YouTubeVideoId,YouTubeVideoTitle)),
                     ("[https://www.youtube.com/channel/%s %s]" % (YouTubeChannelId, YouTubeChannelName)),
                     YouTubeVideoTitle,
                     )
