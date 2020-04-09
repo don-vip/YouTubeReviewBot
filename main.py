@@ -246,6 +246,9 @@ def checkfiles():
         except AttributeError:
             source_area = LowerCasePageText #If we found empty source param we treat the full page as source
 
+        if source_area.isspace(): #check if it's just newlines tabs and spaces.
+            source_area = LowerCasePageText
+
         out(
             "Identified as %s" % DetectSite(source_area),
             color="yellow",
