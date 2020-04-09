@@ -71,12 +71,8 @@ def IsMarkedForDeletion(pagetext):
         ):
             return True
 
-def DetectSite():
+def DetectSite(source_area):
     """Identify the source website of the file."""
-    try:
-        source_area = re.search("\|[Ss]ource=(.*)",LowerCasePageText).group(1)
-    except AttributeError:
-        source_area = LowerCasePageText #If we found empty source param we treat the full page as source
     if (source_area.find('{{from vimeo') != -1):
         return "Vimeo"
     elif (source_area.find('{{from youtube') != -1):
@@ -244,8 +240,14 @@ def checkfiles():
         old_text = pagetext = page.get()
         global LowerCasePageText
         LowerCasePageText = pagetext.lower()
+
+        try:
+            source_area = re.search("\|[Ss]ource=(.*)", pagetext).group(1)
+        except AttributeError:
+            source_area = LowerCasePageText #If we found empty source param we treat the full page as source
+
         out(
-            "Identified as %s" % DetectSite(),
+            "Identified as %s" % DetectSite(source_area),
             color="yellow",
             )
 
@@ -263,7 +265,7 @@ def checkfiles():
                 )
             continue
 
-        elif DetectSite() == "VideoWiki":
+        elif DetectSite(source_area) == "VideoWiki":
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
             EditSummary = "@%s Removing licenseReview Template, not required for video-wiki files beacuse all constituent files are from commons." % uploader(
                 filename,
@@ -297,7 +299,7 @@ def checkfiles():
                 )
             continue
 
-        elif DetectSite() == "Flickr":
+        elif DetectSite(source_area) == "Flickr":
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{FlickrReview}}" , old_text)
             EditSummary = "@%s Marking for flickr review, file's added to [[Category:Flickr videos review needed]]." % uploader(filename,link=True)
             try:
@@ -314,12 +316,12 @@ def checkfiles():
                     )
                 continue
 
-        elif DetectSite() == "Vimeo":
+        elif DetectSite(source_area) == "Vimeo":
             try:
-                VimeoVideoId = re.search(r"{{\s*?[Ff]rom\s[Vv]imeo\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1\=|)(?:\s*?|)([0-9_]+)",pagetext).group(1)
+                VimeoVideoId = re.search(r"{{\s*?[Ff]rom\s[Vv]imeo\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1\=|)(?:\s*?|)([0-9_]+)", source_area).group(1)
             except AttributeError:
                 try:
-                    VimeoVideoId = re.search(r"vimeo\.com\/((?:[0-9_]+))",pagetext).group(1)
+                    VimeoVideoId = re.search(r"vimeo\.com\/((?:[0-9_]+))", source_area).group(1)
                 except AttributeError:
                     out(
                         "PARSING FAILED - Can't get VimeoVideoId",
@@ -443,13 +445,13 @@ def checkfiles():
                     )
                 continue
 
-        elif DetectSite() == "YouTube":
+        elif DetectSite(source_area) == "YouTube":
             try:
                 YouTubeVideoId = re.search(
-                    r"{{\s*?[Ff]rom\s[Yy]ou[Tt]ube\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1|=\||)(?:=|)([^\"&?\/ ]{11})", pagetext).group(1)
+                    r"{{\s*?[Ff]rom\s[Yy]ou[Tt]ube\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1|=\||)(?:=|)([^\"&?\/ ]{11})", source_area).group(1)
             except AttributeError:
                 try:
-                    YouTubeVideoId = re.search(r"https?\:\/\/(?:www|m|)(?:|\.)youtube\.com/watch\Wv\=([^\"&?\/ ]{11})", pagetext).group(1)
+                    YouTubeVideoId = re.search(r"https?\:\/\/(?:www|m|)(?:|\.)youtube\.com/watch\Wv\=([^\"&?\/ ]{11})", source_area).group(1)
                 except AttributeError:
                     out(
                         "PARSING FAILED - Can't get YouTubeVideoId",
@@ -590,7 +592,7 @@ def checkfiles():
                     "YouTube",
                     webpage,
                     old_text,
-                    ("{{From YouTube|1=%s|2=%s}}" % (YouTubeVideoId,YouTubeVideoTitle)),
+                    ("{{From YouTube|1=%s|2=%s}}" % (YouTubeVideoId, YouTubeVideoTitle)),
                     ("[https://www.youtube.com/channel/%s %s]" % (YouTubeChannelId, YouTubeChannelName)),
                     YouTubeVideoTitle,
                     )
