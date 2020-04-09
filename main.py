@@ -73,17 +73,21 @@ def IsMarkedForDeletion(pagetext):
 
 def DetectSite():
     """Identify the source website of the file."""
-    if (LowerCasePageText.find('{{from vimeo') != -1):
+    try:
+        source_area = re.search("\|[Ss]ource=(.*)",LowerCasePageText).group(1)
+    except AttributeError:
+        source_area = LowerCasePageText #If we found empty source param we treat the full page as source
+    if (source_area.find('{{from vimeo') != -1):
         return "Vimeo"
-    elif (LowerCasePageText.find('{{from youtube') != -1):
+    elif (source_area.find('{{from youtube') != -1):
         return "YouTube"
-    elif (LowerCasePageText.find('videowiki.wmflabs.org') != -1):
+    elif (source_area.find('videowiki.wmflabs.org') != -1):
         return "VideoWiki"
-    elif (LowerCasePageText.find('flickr.com/photos') != -1):
+    elif (source_area.find('flickr.com/photos') != -1):
         return "Flickr"
-    elif (LowerCasePageText.find('vimeo.com') != -1):
+    elif (source_area.find('vimeo.com') != -1):
         return "Vimeo"
-    elif (LowerCasePageText.find('youtube.com') != -1):
+    elif (source_area.find('youtube.com') != -1):
         return "YouTube"
 
 def archived_url(SourceURL):
