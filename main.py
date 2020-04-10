@@ -45,7 +45,7 @@ def AutoFill(site,webpage,text,source,author,VideoTitle):
         date = re.search(r"<strong class=\"watch-time-text\">Published on ([A-Za-z]*?) ([0-9]{1,2}), ([0-9]{2,4})</strong>", webpage)
         uploaddate = datetime.strptime(("%s %s %s" % (date.group(2), date.group(1), date.group(3))), "%d %b %Y").date()
         try:
-            description = re.search(r"<meta name=\"description\" content=\"(.*)\">", webpage).group(1)
+            description = re.search(r"<meta name=\"description\" content=\"(.*?)\">", webpage, re.MULTILINE|re.DOTALL).group(1)
         except AttributeError:
             description = VideoTitle
     elif site == "Vimeo": #Not Implemented yet
