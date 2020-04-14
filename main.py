@@ -118,7 +118,7 @@ def archived_webpage(archive_url):
                 headers={'User-Agent': 'User:YouTubeReviewBot on wikimedia commons'},
                 )
             with urlopen(req) as conn: #nosec
-                webpage = str(conn.read())
+                webpage = str(conn.read().decode('utf-8'))
             status = "Done"
         except Exception as e:
             out(
