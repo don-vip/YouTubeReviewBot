@@ -242,7 +242,7 @@ def checkfiles():
         LowerCasePageText = pagetext.lower()
 
         try:
-            source_area = re.search("\|[Ss]ource=(.*)", pagetext).group(1)
+            source_area = re.search("\|source=(.*)", LowerCasePageText).group(1)
         except AttributeError:
             source_area = LowerCasePageText #If we found empty source param we treat the full page as source
 
