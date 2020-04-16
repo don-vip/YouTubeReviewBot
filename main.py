@@ -108,7 +108,7 @@ def archived_url(SourceURL):
 def oldest_ia_page(archive_url):
     url = re.search(r"(?:[0-9])\/(.*)", archive_url).group(1)
     url = ("https://archive.org/wayback/available?url={url}&timestamp=1998").format(url=url)
-    response = urlopen(url)
+    response = urlopen(url) #nosec
     encoding = response.info().get_content_charset('utf8')
     data = json.loads(response.read().decode(encoding))
     oldest_archive_url = (data["archived_snapshots"]["closest"]["url"])
@@ -143,7 +143,7 @@ def archived_webpage(archive_url):
         if iters > 5:
             status = "Stop"
     error301 = "Got an HTTP 301 response at crawl time"
-    if error301 in webpage and webpage != None:
+    if error301 in webpage and webpage is not None:
         out("%s - try to get oldest archived_snapshots" % error301 ,color="red",)
         try:
             webpage = oldest_ia_page(archive_url)
@@ -174,8 +174,9 @@ def display_video_info(VideoId,ChannelId,VideoTitle,ArchiveUrl,ChannelName="Not 
             color="white",
             )
 
-def OwnWork():
+def OwnWork(pagetext):
     """Check if own work by uploader."""
+    LowerCasePageText = pagetext.lower()
     if (LowerCasePageText.find('{{own}}') != -1):
         return True
     elif (LowerCasePageText.find('own work') != -1):
@@ -263,19 +264,19 @@ def checkfiles():
             )
 
         old_text = pagetext = page.get()
-        global LowerCasePageText
-        LowerCasePageText = pagetext.lower()
 
         try:
-            source_area = re.search("\|source=(.*)", LowerCasePageText).group(1)
+            source_area = re.search("\|[Ss]ource=(.*)", pagetext).group(1)
         except AttributeError:
-            source_area = LowerCasePageText #If we found empty source param we treat the full page as source
+            source_area = pagetext #If we found empty source param we treat the full page as source
 
         if source_area.isspace(): #check if it's just newlines tabs and spaces.
-            source_area = LowerCasePageText
+            source_area = pagetext
+
+        Identified_site = DetectSite((source_area.lower()))
 
         out(
-            "Identified as %s" % DetectSite(source_area),
+            "Identified as %s" % Identified_site,
             color="yellow",
             )
 
@@ -293,7 +294,7 @@ def checkfiles():
                 )
             continue
 
-        elif DetectSite(source_area) == "VideoWiki":
+        elif Identified_site == "VideoWiki":
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
             EditSummary = "@%s Removing licenseReview Template, not required for video-wiki files beacuse all constituent files are from commons." % uploader(
                 filename,
@@ -308,7 +309,7 @@ def checkfiles():
                     )
                 continue
 
-        elif OwnWork():
+        elif OwnWork(pagetext):
             new_text = re.sub(RegexOfLicenseReviewTemplate, "" , old_text)
             EditSummary = "@%s Removing licenseReview Template, not required for ownwork." % uploader(filename,link=True)
             try:
@@ -327,7 +328,7 @@ def checkfiles():
                 )
             continue
 
-        elif DetectSite(source_area) == "Flickr":
+        elif Identified_site == "Flickr":
             new_text = re.sub(RegexOfLicenseReviewTemplate, "{{FlickrReview}}" , old_text)
             EditSummary = "@%s Marking for flickr review, file's added to [[Category:Flickr videos review needed]]." % uploader(filename,link=True)
             try:
@@ -344,7 +345,7 @@ def checkfiles():
                     )
                 continue
 
-        elif DetectSite(source_area) == "Vimeo":
+        elif Identified_site == "Vimeo":
             try:
                 VimeoVideoId = re.search(r"{{\s*?[Ff]rom\s[Vv]imeo\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1\=|)(?:\s*?|)([0-9_]+)", source_area).group(1)
             except AttributeError:
@@ -473,7 +474,7 @@ def checkfiles():
                     )
                 continue
 
-        elif DetectSite(source_area) == "YouTube":
+        elif Identified_site == "YouTube":
             try:
                 YouTubeVideoId = re.search(
                     r"{{\s*?[Ff]rom\s[Yy]ou[Tt]ube\s*(?:\||\|1\=|\s*?)(?:\s*)(?:1|=\||)(?:=|)([^\"&?\/ ]{11})", source_area).group(1)
@@ -676,7 +677,6 @@ def report_run():
 DRY = None
 AUTO = None
 SITE = None
-LowerCasePageText = None
 
 def main(*args):
     global SITE
