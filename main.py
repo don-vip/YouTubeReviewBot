@@ -134,16 +134,6 @@ def archived_webpage(archive_url):
                 )
             with urlopen(req) as conn: #nosec
                 webpage = str(conn.read().decode('utf-8', 'ignore'))
-            error301 = "Got an HTTP 301 response at crawl time"
-            if error301 in webpage:
-                out("%s - try to get oldest archive" % error301 ,color="red",)
-                try:
-                    webpage = oldest_ia_page(archive_url)
-                except Exception as e:
-                    out(
-                        e,
-                        color="red",
-                        )
             status = "Done"
         except Exception as e:
             out(
@@ -152,6 +142,16 @@ def archived_webpage(archive_url):
                 )
         if iters > 5:
             status = "Stop"
+    error301 = "Got an HTTP 301 response at crawl time"
+    if error301 in webpage and webpage != None:
+        out("%s - try to get oldest archived_snapshots" % error301 ,color="red",)
+        try:
+            webpage = oldest_ia_page(archive_url)
+        except Exception as e:
+            out(
+                e,
+                color="red",
+                )
     return webpage
 
 def check_channel(ChannelId):
