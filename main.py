@@ -134,7 +134,9 @@ def archived_webpage(archive_url):
                 )
             with urlopen(req) as conn: #nosec
                 webpage = str(conn.read().decode('utf-8', 'ignore'))
-            if "Got an HTTP 301 response at crawl time" in webpage:
+            error301 = "Got an HTTP 301 response at crawl time"
+            if error301 in webpage:
+                out("%s - try to get oldest archive" % error301 ,color="red",)
                 try:
                     webpage = oldest_ia_page(archive_url)
                 except Exception as e:
