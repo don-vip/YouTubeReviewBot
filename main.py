@@ -105,6 +105,21 @@ def archived_url(SourceURL):
             status = "Stop"
     return archive_url
 
+def oldest_ia_page(archive_url):
+    url = re.search(r"(?:[0-9])\/(.*)", archive_url).group(1)
+    url = ("https://archive.org/wayback/available?url={url}&timestamp=1998").format(url=url)
+    response = urlopen(url)
+    encoding = response.info().get_content_charset('utf8')
+    data = json.loads(response.read().decode(encoding))
+    oldest_archive_url = (data["archived_snapshots"]["closest"]["url"])
+    req = Request(
+        oldest_archive_url,
+        headers={'User-Agent': 'User:YouTubeReviewBot on wikimedia commons'},
+        )
+    with urlopen(req) as conn: #nosec
+        webpage = str(conn.read().decode('utf-8', 'ignore'))
+    return webpage
+
 def archived_webpage(archive_url):
     """Get the source code of the archived webpage."""
     webpage = None
@@ -119,6 +134,14 @@ def archived_webpage(archive_url):
                 )
             with urlopen(req) as conn: #nosec
                 webpage = str(conn.read().decode('utf-8', 'ignore'))
+            if "Got an HTTP 301 response at crawl time" in webpage:
+                try:
+                    webpage = oldest_ia_page(archive_url)
+                except Exception as e:
+                    out(
+                        e,
+                        color="red",
+                        )
             status = "Done"
         except Exception as e:
             out(
