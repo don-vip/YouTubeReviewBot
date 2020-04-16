@@ -110,6 +110,7 @@ def oldest_ia_page(archive_url):
     url = ("https://archive.org/wayback/available?url={url}&timestamp=1998").format(url=url)
     response = urlopen(url) #nosec
     encoding = response.info().get_content_charset('utf8')
+    import json
     data = json.loads(response.read().decode(encoding))
     oldest_archive_url = (data["archived_snapshots"]["closest"]["url"])
     req = Request(
