@@ -53,6 +53,9 @@ def AutoFill(site,webpage,text,source,author,VideoTitle,Replace_nld):
                 description = re.search(r"<meta name=\"description\" content=\"(.*?)\">", webpage, re.MULTILINE|re.DOTALL).group(1)
             except AttributeError:
                 description = VideoTitle
+        # Handle cases where there's no description at all on YouTube
+        if description.isspace():
+            description = VideoTitle
 
     elif site == "Vimeo": #Not Implemented yet
         uploaddate = ""
@@ -66,7 +69,7 @@ def AutoFill(site,webpage,text,source,author,VideoTitle,Replace_nld):
     text = re.sub("\|author=.*", "|author=%s" % author, text)
     
     if Replace_nld:
-        text = re.sub("{{No license since.*?}}", "%s" % License, text)
+        text = re.sub("{{No license since.*?}}", "%s" % License, text, re.IGNORECASE)
 
     return text
 
