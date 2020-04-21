@@ -54,7 +54,7 @@ def AutoFill(site,webpage,text,source,author,VideoTitle,Replace_nld):
             except AttributeError:
                 description = VideoTitle
         # Handle cases where there's no description at all on YouTube
-        if description.isspace():
+        if description.isspace() or not description:
             description = VideoTitle
 
     elif site == "Vimeo": #Not Implemented yet
