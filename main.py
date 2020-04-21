@@ -39,9 +39,10 @@ def informatdate():
     """Current date in yyyy-mm-dd format."""
     return (datetime.utcnow()).strftime('%Y-%m-%d')
 
-def AutoFill(site,webpage,text,source,author,VideoTitle):
+def AutoFill(site,webpage,text,source,author,VideoTitle,Replace_nld):
     """Auto fills empty information template parameters."""
     if site == "YouTube":
+        License = "{{YouTube CC-BY|%s}}" % author
         date = re.search(r"<strong class=\"watch-time-text\">Published on ([A-Za-z]*?) ([0-9]{1,2}), ([0-9]{2,4})</strong>", webpage)
         uploaddate = datetime.strptime(("%s %s %s" % (date.group(2), date.group(1), date.group(3))), "%d %b %Y").date()
 
@@ -63,6 +64,10 @@ def AutoFill(site,webpage,text,source,author,VideoTitle):
     text = re.sub("\|date=.*", "|date=%s" % uploaddate, text)
     text = re.sub("\|source=.*", "|source=%s" % source, text)
     text = re.sub("\|author=.*", "|author=%s" % author, text)
+    
+    if Replace_nld:
+        text = re.sub("{{No license since.*?}}", "%s" % License, text)
+
     return text
 
 def IsMarkedForDeletion(pagetext):
@@ -609,9 +614,11 @@ def checkfiles():
             if check_channel(YouTubeChannelId) == "Trusted":
                 TrustTextAppend = "[[User:YouTubeReviewBot/Trusted|✔️ - Trusted YouTube Channel of  %s ]]" %  YouTubeChannelName
                 YouTubeLicense = ""
+                Replace_nld = False
             else:
                 TrustTextAppend = ""
                 YouTubeLicense = "under terms of CC BY 3.0"
+                Replace_nld = True # replace no license with {{YouTube CC-BY|ChannelName}}
 
             EditSummary = "%s LR Passed, %s, by %s (%s) %s at www.youtube.com/watch?v=%s (Archived - WayBack Machine)" % (
                 TrustTextAppend,
@@ -630,6 +637,7 @@ def checkfiles():
                     ("{{From YouTube|1=%s|2=%s}}" % (YouTubeVideoId, YouTubeVideoTitle)),
                     ("[https://www.youtube.com/channel/%s %s]" % (YouTubeChannelId, YouTubeChannelName)),
                     YouTubeVideoTitle,
+                    Replace_nld
                     )
             except Exception as e:
                 out(e,color="red")
