@@ -1,2 +1,2 @@
-pywikibot==3.0.20200326
+pywikibot==3.0.20200405
 savepagenow==0.0.13
